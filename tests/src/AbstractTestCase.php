@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WaffleTests;
+namespace WaffleTests\Commons\Security;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
