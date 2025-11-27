@@ -1,0 +1,331 @@
+variant = "loose"
+
+[[issues]]
+file = "src/Abstract/AbstractSecurity.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Abstract\AbstractSecurity::analyze`.'
+count = 1
+
+[[issues]]
+file = "src/Abstract/AbstractSecurity.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Abstract\AbstractSecurity` cannot implement unknown type `SecurityInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level10Rule.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level10Rule::check`.'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level10Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level10Rule` cannot implement unknown type `SecurityRuleInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level10Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level10Rule` cannot use unknown type `ReflectionTrait`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level1Rule.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level1Rule::check`.'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level1Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level1Rule` cannot implement unknown type `SecurityRuleInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level1Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level1Rule` cannot use unknown type `ReflectionTrait`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level2Rule.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level2Rule::check`.'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level2Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level2Rule` cannot implement unknown type `SecurityRuleInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level2Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level2Rule` cannot use unknown type `ReflectionTrait`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level3Rule.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level3Rule::check`.'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level3Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level3Rule` cannot implement unknown type `SecurityRuleInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level3Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level3Rule` cannot use unknown type `ReflectionTrait`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level4Rule.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level4Rule::check`.'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level4Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level4Rule` cannot implement unknown type `SecurityRuleInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level4Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level4Rule` cannot use unknown type `ReflectionTrait`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level5Rule.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level5Rule::check`.'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level5Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level5Rule` cannot implement unknown type `SecurityRuleInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level5Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level5Rule` cannot use unknown type `ReflectionTrait`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level6Rule.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level6Rule::check`.'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level6Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level6Rule` cannot implement unknown type `SecurityRuleInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level6Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level6Rule` cannot use unknown type `ReflectionTrait`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level7Rule.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level7Rule::check`.'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level7Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level7Rule` cannot implement unknown type `SecurityRuleInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level7Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level7Rule` cannot use unknown type `ReflectionTrait`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level8Rule.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level8Rule::check`.'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level8Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level8Rule` cannot implement unknown type `SecurityRuleInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level8Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level8Rule` cannot use unknown type `ReflectionTrait`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level9Rule.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level9Rule::check`.'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level9Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level9Rule` cannot implement unknown type `SecurityRuleInterface`'
+count = 1
+
+[[issues]]
+file = "src/Rule/Level9Rule.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Rule\Level9Rule` cannot use unknown type `ReflectionTrait`'
+count = 1
+
+[[issues]]
+file = "tests/src/Abstract/AbstractSecurityTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Abstract\AbstractSecurityTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level10RuleTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level10RuleTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level10RuleTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Rule\Level10RuleTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level1RuleTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level1RuleTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level1RuleTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Rule\Level1RuleTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level2RuleTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level2RuleTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level2RuleTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Rule\Level2RuleTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level3RuleTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level3RuleTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level3RuleTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Rule\Level3RuleTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level4RuleTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level4RuleTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level4RuleTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Rule\Level4RuleTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level5RuleTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level5RuleTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level5RuleTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Rule\Level5RuleTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level6RuleTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level6RuleTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level6RuleTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Rule\Level6RuleTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level7RuleTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level7RuleTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level7RuleTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Rule\Level7RuleTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level8RuleTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level8RuleTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level8RuleTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Rule\Level8RuleTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level9RuleTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Rule\Level9RuleTest` cannot extend unknown type `TestCase`'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Trait\SecurityTraitTest::setup`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "non-existent-class-like"
+message = 'Class `WaffleTests\Commons\Security\Trait\SecurityTraitTest` cannot extend unknown type `TestCase`'
+count = 1
