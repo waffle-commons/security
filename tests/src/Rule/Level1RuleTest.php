@@ -7,7 +7,7 @@ namespace WaffleTests\Commons\Security\Rule;
 use PHPUnit\Framework\Attributes\CoversClass;
 use stdClass;
 use Waffle\Commons\Security\Rule\Level1Rule;
-use WaffleTests\AbstractTestCase as TestCase;
+use WaffleTests\Commons\Security\AbstractTestCase as TestCase;
 
 // Use a standard class for testing
 

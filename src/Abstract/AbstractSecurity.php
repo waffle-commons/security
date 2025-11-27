@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Waffle\Commons\Security\Abstract;
 
-use Waffle\Commons\Config\Config;
+use Waffle\Commons\Contracts\Config\ConfigInterface;
 use Waffle\Commons\Contracts\Constant\Constant;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
 use Waffle\Commons\Security\Trait\SecurityTrait;
@@ -18,7 +18,7 @@ abstract class AbstractSecurity implements SecurityInterface
         set => $this->level = $value;
     }
 
-    abstract public function __construct(Config $cfg);
+    abstract public function __construct(ConfigInterface $cfg);
 
     /**
      * @param object $object

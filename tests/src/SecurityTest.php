@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WaffleTests\Commons\Security;
 
 use ReflectionObject;
-use WaffleTests\AbstractTestCase as TestCase;
+use WaffleTests\Commons\Security\AbstractTestCase as TestCase;
 
 final class SecurityTest extends TestCase
 {

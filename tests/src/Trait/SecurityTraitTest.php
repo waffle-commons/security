@@ -4,18 +4,7 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Trait;
 
-use PHPUnit\Framework\Attributes\CoversTrait;
-use PHPUnit\Framework\Attributes\DataProvider;
-use ReflectionClass;
-use stdClass;
-use Waffle\Commons\Security\Trait\SecurityTrait;
-use Waffle\Exception\SecurityException;
-use WaffleTests\AbstractTestCase as TestCase;
-use WaffleTests\Commons\Security\Trait\Helper\TraitSecurity;
-use WaffleTests\Helper\Service\NonReadOnlyService;
-use WaffleTests\Trait\Helper\FinalReadOnlyClass;
-use WaffleTests\Trait\Helper\NonFinalTestController;
-use WaffleTests\Trait\Helper\UninitializedPropertyClass;
+use PHPUnit\Framework\Attributes\CoversTrait;use PHPUnit\Framework\Attributes\DataProvider;use ReflectionClass;use stdClass;use Waffle\Commons\Security\Trait\SecurityTrait;use Waffle\Exception\SecurityException;use WaffleTests\Commons\Security\AbstractTestCase as TestCase;use WaffleTests\Commons\Security\Trait\Helper\TraitSecurity;use WaffleTests\Commons\Utils\Trait\Helper\FinalReadOnlyClass;use WaffleTests\Commons\Utils\Trait\Helper\NonFinalTestController;use WaffleTests\Helper\Service\NonReadOnlyService;use WaffleTests\Trait\Helper\UninitializedPropertyClass;
 
 #[CoversTrait(SecurityTrait::class)]
 final class SecurityTraitTest extends TestCase

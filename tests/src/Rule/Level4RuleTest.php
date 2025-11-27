@@ -7,7 +7,7 @@ namespace WaffleTests\Commons\Security\Rule;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Waffle\Commons\Security\Rule\Level4Rule;
 use Waffle\Exception\SecurityException;
-use WaffleTests\AbstractTestCase as TestCase;
+use WaffleTests\Commons\Security\AbstractTestCase as TestCase;
 use WaffleTests\Commons\Security\Helper\Rule4InvalidObject;
 use WaffleTests\Commons\Security\Helper\Rule4TypedChildUntypedParent;
 use WaffleTests\Commons\Security\Helper\Rule4ValidObject;

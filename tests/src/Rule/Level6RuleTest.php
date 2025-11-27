@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionClass;
 use Waffle\Commons\Security\Rule\Level6Rule;
 use Waffle\Exception\SecurityException;
-use WaffleTests\AbstractTestCase as TestCase;
+use WaffleTests\Commons\Security\AbstractTestCase as TestCase;
 use WaffleTests\Commons\Security\Helper\Rule6ValidObject;
 use WaffleTests\Trait\Helper\UninitializedPropertyClass;
 

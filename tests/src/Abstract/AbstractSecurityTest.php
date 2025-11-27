@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Abstract;
 
-use stdClass;
-use Waffle\Exception\SecurityException;
-use WaffleTests\AbstractTestCase as TestCase;
-use WaffleTests\Commons\Security\Abstract\Helper\ConcreteTestSecurity;
-use WaffleTests\Trait\Helper\NonFinalTestController;
+use stdClass;use Waffle\Exception\SecurityException;use WaffleTests\Commons\Security\Abstract\Helper\ConcreteTestSecurity;use WaffleTests\Commons\Security\AbstractTestCase as TestCase;use WaffleTests\Commons\Utils\Trait\Helper\NonFinalTestController;
 
 final class AbstractSecurityTest extends TestCase
 {

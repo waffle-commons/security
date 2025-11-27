@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace Waffle\Commons\Security\Rule;
 
-use ReflectionMethod;
-use ReflectionNamedType;
-use Waffle\Commons\Contracts\Constant\Constant;
-use Waffle\Commons\Contracts\Security\SecurityRuleInterface;
-use Waffle\Exception\SecurityException;
-use Waffle\Trait\ReflectionTrait;
+use ReflectionMethod;use ReflectionNamedType;use Waffle\Commons\Utils\Trait\ReflectionTrait;use Waffle\Commons\Contracts\Constant\Constant;use Waffle\Commons\Contracts\Security\SecurityRuleInterface;use Waffle\Exception\SecurityException;
 
 class Level7Rule implements SecurityRuleInterface
 {
