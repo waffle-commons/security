@@ -4,7 +4,18 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Trait;
 
-use PHPUnit\Framework\Attributes\CoversTrait;use PHPUnit\Framework\Attributes\DataProvider;use ReflectionClass;use stdClass;use Waffle\Commons\Security\Trait\SecurityTrait;use Waffle\Exception\SecurityException;use WaffleTests\Commons\Security\AbstractTestCase as TestCase;use WaffleTests\Commons\Security\Trait\Helper\TraitSecurity;use WaffleTests\Commons\Utils\Trait\Helper\FinalReadOnlyClass;use WaffleTests\Commons\Utils\Trait\Helper\NonFinalTestController;use WaffleTests\Helper\Service\NonReadOnlyService;use WaffleTests\Trait\Helper\UninitializedPropertyClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
+use ReflectionClass;
+use stdClass;
+use Waffle\Commons\Security\Exception\SecurityException;
+use Waffle\Commons\Security\Trait\SecurityTrait;
+use WaffleTests\Commons\Security\AbstractTestCase as TestCase;
+use WaffleTests\Commons\Security\Helper\Service\NonReadOnlyService;
+use WaffleTests\Commons\Security\Trait\Helper\FinalReadOnlyClass;
+use WaffleTests\Commons\Security\Trait\Helper\NonFinalTestController;
+use WaffleTests\Commons\Security\Trait\Helper\TraitSecurity;
+use WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass;
 
 #[CoversTrait(SecurityTrait::class)]
 final class SecurityTraitTest extends TestCase
@@ -101,7 +112,7 @@ final class SecurityTraitTest extends TestCase
         static::expectException(SecurityException::class);
         $msg6 =
             'Level 6: Property \'uninitializedProperty\' '
-            . 'in WaffleTests\Trait\Helper\UninitializedPropertyClass is not initialized.';
+            . 'in WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass is not initialized.';
         static::expectExceptionMessage($msg6);
 
         // 1. Use Reflection to get the class blueprint.

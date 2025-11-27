@@ -28,7 +28,7 @@ class TraitSecurity
      * Public wrapper for the protected/trait isSecure method.
      * @param object $object
      * @param int $level
-     * @throws \Waffle\Exception\SecurityException
+     * @throws \Waffle\Commons\Security\Exception\SecurityException
      */
     public function callIsSecure(object $object, int $level = 10): void
     {

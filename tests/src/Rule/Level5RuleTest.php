@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace WaffleTests\Commons\Security\Rule;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use Waffle\Commons\Security\Exception\SecurityException;
 use Waffle\Commons\Security\Rule\Level5Rule;
-use Waffle\Exception\SecurityException;
 use WaffleTests\Commons\Security\AbstractTestCase as TestCase;
 use WaffleTests\Commons\Security\Helper\Rule5InvalidObject;
 use WaffleTests\Commons\Security\Helper\Rule5TypedChildUntypedParent;

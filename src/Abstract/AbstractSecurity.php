@@ -7,8 +7,8 @@ namespace Waffle\Commons\Security\Abstract;
 use Waffle\Commons\Contracts\Config\ConfigInterface;
 use Waffle\Commons\Contracts\Constant\Constant;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
+use Waffle\Commons\Security\Exception\SecurityException;
 use Waffle\Commons\Security\Trait\SecurityTrait;
-use Waffle\Exception\SecurityException;
 
 abstract class AbstractSecurity implements SecurityInterface
 {

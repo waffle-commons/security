@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Waffle\Commons\Security\Trait;
 
+use Waffle\Commons\Security\Exception\SecurityException;
 use Waffle\Commons\Security\Rule\Level10Rule;
 use Waffle\Commons\Security\Rule\Level1Rule;
 use Waffle\Commons\Security\Rule\Level2Rule;
@@ -14,7 +15,6 @@ use Waffle\Commons\Security\Rule\Level6Rule;
 use Waffle\Commons\Security\Rule\Level7Rule;
 use Waffle\Commons\Security\Rule\Level8Rule;
 use Waffle\Commons\Security\Rule\Level9Rule;
-use Waffle\Exception\SecurityException;
 
 trait SecurityTrait
 {

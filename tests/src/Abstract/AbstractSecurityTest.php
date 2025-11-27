@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Abstract;
 
-use stdClass;use Waffle\Exception\SecurityException;use WaffleTests\Commons\Security\Abstract\Helper\ConcreteTestSecurity;use WaffleTests\Commons\Security\AbstractTestCase as TestCase;use WaffleTests\Commons\Utils\Trait\Helper\NonFinalTestController;
+use stdClass;
+use Waffle\Commons\Security\Exception\SecurityException;
+use WaffleTests\Commons\Security\Abstract\Helper\ConcreteTestSecurity;
+use WaffleTests\Commons\Security\AbstractTestCase as TestCase;
+use WaffleTests\Commons\Security\Trait\Helper\NonFinalTestController;
 
 final class AbstractSecurityTest extends TestCase
 {
@@ -48,7 +52,9 @@ final class AbstractSecurityTest extends TestCase
 
         // --- Assertions ---
         static::expectException(SecurityException::class);
-        static::expectExceptionMessage('The object WaffleTests\Trait\Helper\NonFinalTestController is not secure.');
+        static::expectExceptionMessage(
+            'The object WaffleTests\Commons\Security\Trait\Helper\NonFinalTestController is not secure.',
+        );
 
         // --- Execution ---
         // This call should trigger the security exception.

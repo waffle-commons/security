@@ -13,6 +13,12 @@ message = 'Class `Waffle\Commons\Security\Abstract\AbstractSecurity` cannot impl
 count = 1
 
 [[issues]]
+file = "src/Exception/SecurityException.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Exception\SecurityException` cannot implement unknown type `SecurityExceptionInterface`'
+count = 1
+
+[[issues]]
 file = "src/Rule/Level10Rule.php"
 code = "invalid-override-attribute"
 message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level10Rule::check`.'
@@ -193,139 +199,31 @@ message = 'Class `Waffle\Commons\Security\Rule\Level9Rule` cannot use unknown ty
 count = 1
 
 [[issues]]
-file = "tests/src/Abstract/AbstractSecurityTest.php"
+file = "tests/src/AbstractTestCase.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `waffletests\commons\security\abstracttestcase::createandgetconfig`: expected `unknown-ref(Waffle\Commons\Contracts\Config\ConfigInterface)`, but found `PHPUnit\Framework\MockObject\MockObject&Waffle\Commons\Contracts\Config\ConfigInterface`.'
+count = 1
+
+[[issues]]
+file = "tests/src/AbstractTestCase.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "tests/src/AbstractTestCase.php"
 code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Abstract\AbstractSecurityTest` cannot extend unknown type `TestCase`'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level10RuleTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level10RuleTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level10RuleTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Rule\Level10RuleTest` cannot extend unknown type `TestCase`'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level1RuleTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level1RuleTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level1RuleTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Rule\Level1RuleTest` cannot extend unknown type `TestCase`'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level2RuleTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level2RuleTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level2RuleTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Rule\Level2RuleTest` cannot extend unknown type `TestCase`'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level3RuleTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level3RuleTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level3RuleTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Rule\Level3RuleTest` cannot extend unknown type `TestCase`'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level4RuleTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level4RuleTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level4RuleTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Rule\Level4RuleTest` cannot extend unknown type `TestCase`'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level5RuleTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level5RuleTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level5RuleTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Rule\Level5RuleTest` cannot extend unknown type `TestCase`'
+message = 'Class, Interface, or Trait `Waffle\Commons\Contracts\Config\ConfigInterface` does not exist.'
 count = 1
 
 [[issues]]
 file = "tests/src/Rule/Level6RuleTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level6RuleTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level6RuleTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Rule\Level6RuleTest` cannot extend unknown type `TestCase`'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level7RuleTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level7RuleTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level7RuleTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Rule\Level7RuleTest` cannot extend unknown type `TestCase`'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level8RuleTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level8RuleTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level8RuleTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Rule\Level8RuleTest` cannot extend unknown type `TestCase`'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level9RuleTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Rule\Level9RuleTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level9RuleTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Rule\Level9RuleTest` cannot extend unknown type `TestCase`'
+code = "possibly-invalid-argument"
+message = '''Possible argument type mismatch for argument #1 of `Waffle\Commons\Security\Rule\Level6Rule::check`: expected `object`, but possibly received `WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass|class-string('WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass')`.'''
 count = 1
 
 [[issues]]
 file = "tests/src/Trait/SecurityTraitTest.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `WaffleTests\Commons\Security\Trait\SecurityTraitTest::setup`.'
-count = 1
-
-[[issues]]
-file = "tests/src/Trait/SecurityTraitTest.php"
-code = "non-existent-class-like"
-message = 'Class `WaffleTests\Commons\Security\Trait\SecurityTraitTest` cannot extend unknown type `TestCase`'
+code = "possibly-invalid-argument"
+message = '''Possible argument type mismatch for argument #1 of `WaffleTests\Commons\Security\Trait\Helper\TraitSecurity::callissecure`: expected `object`, but possibly received `WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass|class-string('WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass')`.'''
 count = 1

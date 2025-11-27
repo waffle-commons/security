@@ -10,6 +10,8 @@ const APP_CONFIG = 'temp_config';
 require_once __DIR__ . '/src/AbstractTestCase.php';
 
 // required test helpers, so we include them manually.
+require_once __DIR__ . '/src/Helper/Service/AbstractService.php';
+require_once __DIR__ . '/src/Helper/Service/NonReadOnlyService.php';
 require_once __DIR__ . '/src/Helper/Rule2ValidObject1.php';
 require_once __DIR__ . '/src/Helper/Rule2ValidObject2.php';
 require_once __DIR__ . '/src/Helper/Rule2InvalidObject.php';
@@ -35,3 +37,6 @@ require_once __DIR__ . '/src/Helper/Rule8ViolationName.php';
 require_once __DIR__ . '/src/Helper/Rule9ViolationName.php';
 require_once __DIR__ . '/src/Helper/Rule10ViolatingObject.php';
 require_once __DIR__ . '/src/Abstract/Helper/ConcreteTestSecurity.php';
+require_once __DIR__ . '/src/Trait/Helper/FinalReadOnlyClass.php';
+require_once __DIR__ . '/src/Trait/Helper/NonFinalTestController.php';
+require_once __DIR__ . '/src/Trait/Helper/UninitializedPropertyClass.php';

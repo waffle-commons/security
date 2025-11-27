@@ -6,11 +6,11 @@ namespace WaffleTests\Commons\Security\Rule;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionClass;
+use Waffle\Commons\Security\Exception\SecurityException;
 use Waffle\Commons\Security\Rule\Level6Rule;
-use Waffle\Exception\SecurityException;
 use WaffleTests\Commons\Security\AbstractTestCase as TestCase;
 use WaffleTests\Commons\Security\Helper\Rule6ValidObject;
-use WaffleTests\Trait\Helper\UninitializedPropertyClass;
+use WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass;
 
 // Use the existing helper
 

@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Rule;
 
-use PHPUnit\Framework\Attributes\CoversClass;use Waffle\Commons\Security\Rule\Level8Rule;use Waffle\Exception\SecurityException;use WaffleTests\Commons\Security\AbstractTestCase as TestCase;use WaffleTests\Commons\Security\Helper\Rule8FinalController;use WaffleTests\Commons\Security\Helper\Rule8ViolationName;use WaffleTests\Commons\Utils\Trait\Helper\NonFinalTestController;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Waffle\Commons\Security\Exception\SecurityException;
+use Waffle\Commons\Security\Rule\Level8Rule;
+use WaffleTests\Commons\Security\AbstractTestCase as TestCase;
+use WaffleTests\Commons\Security\Helper\Rule8FinalController;
+use WaffleTests\Commons\Security\Helper\Rule8ViolationName;
+use WaffleTests\Commons\Security\Trait\Helper\NonFinalTestController;
 
 // Use existing helper
 

@@ -26,9 +26,15 @@ count = 2
 
 [[issues]]
 file = "tests/src/AbstractTestCase.php"
-code = "no-redundant-method-override"
-message = "Redundant method override."
-count = 2
+code = "no-redundant-use"
+message = "Unused import: `Config`."
+count = 1
+
+[[issues]]
+file = "tests/src/AbstractTestCase.php"
+code = "no-redundant-use"
+message = "Unused import: `Failsafe`."
+count = 1
 
 [[issues]]
 file = "tests/src/Helper/Rule3ValidObject1.php"

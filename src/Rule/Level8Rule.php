@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Waffle\Commons\Security\Rule;
 
-use ReflectionObject;use Waffle\Commons\Utils\Trait\ReflectionTrait;use Waffle\Commons\Contracts\Security\SecurityRuleInterface;use Waffle\Exception\SecurityException;
+use ReflectionObject;
+use Waffle\Commons\Contracts\Security\SecurityRuleInterface;
+use Waffle\Commons\Security\Exception\SecurityException;
+use Waffle\Commons\Utils\Trait\ReflectionTrait;
 
 class Level8Rule implements SecurityRuleInterface
 {

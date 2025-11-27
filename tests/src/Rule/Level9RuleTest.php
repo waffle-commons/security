@@ -4,7 +4,14 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Rule;
 
-use PHPUnit\Framework\Attributes\CoversClass;use Waffle\Commons\Security\Rule\Level9Rule;use Waffle\Exception\SecurityException;use WaffleTests\Commons\Security\AbstractTestCase as TestCase;use WaffleTests\Commons\Security\Helper\Rule9ViolationName;use WaffleTests\Commons\Utils\Trait\Helper\FinalReadOnlyClass;use WaffleTests\Helper\Service\NonReadOnlyService;use WaffleTests\Trait\Helper\AbstractService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Waffle\Commons\Security\Exception\SecurityException;
+use Waffle\Commons\Security\Rule\Level9Rule;
+use WaffleTests\Commons\Security\AbstractTestCase as TestCase;
+use WaffleTests\Commons\Security\Helper\Rule9ViolationName;
+use WaffleTests\Commons\Security\Helper\Service\AbstractService;
+use WaffleTests\Commons\Security\Helper\Service\NonReadOnlyService;
+use WaffleTests\Commons\Security\Trait\Helper\FinalReadOnlyClass;
 
 // A service violating the rule
 // A service respecting the rule (assuming it's readonly or abstract)

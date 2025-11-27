@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0170a0db968c673b62af9e808fd6da5",
+    "content-hash": "80659c6b35de82ccae2081c685a7bcbc",
     "packages": [
         {
             "name": "psr/cache",
@@ -397,6 +397,86 @@
                 }
             ],
             "description": "Contracts component for Waffle framework.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "waffle-commons/utils",
+            "version": "1.0.0-dev",
+            "dist": {
+                "type": "path",
+                "url": "../utils",
+                "reference": "06e41486bf60fe222210b83029cb63c77613df12"
+            },
+            "require": {
+                "php": "^8.4",
+                "waffle-commons/contracts": "1.0.0-dev"
+            },
+            "require-dev": {
+                "carthage-software/mago": "^1.0.0-beta.31",
+                "php-mock/php-mock-phpunit": "^2.13",
+                "phpunit/phpunit": "^12.0",
+                "vimeo/psalm": "^6.13"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Waffle\\Commons\\Utils\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "WaffleTests\\Commons\\Utils\\": "tests/src/"
+                }
+            },
+            "scripts": {
+                "formatter": [
+                    "vendor/bin/mago fmt"
+                ],
+                "linter": [
+                    "vendor/bin/mago lint"
+                ],
+                "analyzer": [
+                    "vendor/bin/mago analyze"
+                ],
+                "phpunit": [
+                    "vendor/bin/phpunit --log-junit var/data/phpunit-coverage/junit.xml --coverage-html var/data/phpunit-coverage"
+                ],
+                "benchmark": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "vendor/bin/phpbench run --report=default_report --output=waffle_html --retry-threshold=10"
+                ],
+                "mago": [
+                    "@formatter",
+                    "@linter",
+                    "@analyzer"
+                ],
+                "tests": [
+                    "@phpunit"
+                ],
+                "scan": [
+                    "@mago",
+                    "@tests"
+                ],
+                "ci": [
+                    "@mago",
+                    "@tests",
+                    "composer audit",
+                    "vendor/bin/psalm --taint-analysis"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Leslie Petrimaux",
+                    "email": "contact@waffle-commons.cloud"
+                }
+            ],
+            "description": "Utils component for Waffle framework.",
             "transport-options": {
                 "symlink": true,
                 "relative": true
@@ -5387,7 +5467,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "waffle-commons/contracts": 20
+        "waffle-commons/contracts": 20,
+        "waffle-commons/utils": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
