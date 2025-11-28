@@ -13,4 +13,14 @@ final class SecurityException extends Exception implements SecurityExceptionInte
     {
         parent::__construct($message, $code, $previous);
     }
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): array
+    {
+        return [
+            'message' => $this->getMessage(),
+            'code' => $this->getCode(),
+        ];
+    }
 }
