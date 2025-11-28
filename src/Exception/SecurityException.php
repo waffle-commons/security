@@ -13,6 +13,7 @@ final class SecurityException extends Exception implements SecurityExceptionInte
     {
         parent::__construct($message, $code, $previous);
     }
+
     /**
      * {@inheritdoc}
      */
