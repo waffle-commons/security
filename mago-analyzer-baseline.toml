@@ -2,237 +2,27 @@ variant = "loose"
 
 [[issues]]
 file = "src/Abstract/AbstractSecurity.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Abstract\AbstractSecurity::analyze`.'
+code = "invalid-property-read"
+message = 'Cannot read from write-only property `Waffle\Commons\Security\Abstract\AbstractSecurity::$level` - property only has a set hook.'
 count = 1
 
 [[issues]]
 file = "src/Abstract/AbstractSecurity.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Abstract\AbstractSecurity` cannot implement unknown type `SecurityInterface`'
+code = "no-value"
+message = 'Argument #2 passed to method `waffle\commons\security\trait\securitytrait::issecure` has type `never`, meaning it cannot produce a value.'
 count = 1
 
 [[issues]]
 file = "src/Container/SecureContainer.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Container\SecureContainer::set`.'
-count = 1
-
-[[issues]]
-file = "src/Container/SecureContainer.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Container\SecureContainer` cannot implement unknown type `ContainerInterface`'
+code = "invalid-throw"
+message = 'Cannot throw type `Waffle\Commons\Contracts\Security\Exception\SecurityExceptionInterface` because it is not an instance of Throwable.'
 count = 1
 
 [[issues]]
 file = "src/Exception/SecurityException.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Exception\SecurityException` cannot implement unknown type `SecurityExceptionInterface`'
+code = "missing-override-attribute"
+message = 'Missing `#[Override]` attribute on overriding method `Waffle\Commons\Security\Exception\SecurityException::serialize`.'
 count = 1
-
-[[issues]]
-file = "src/Rule/Level10Rule.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level10Rule::check`.'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level10Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level10Rule` cannot implement unknown type `SecurityRuleInterface`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level10Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level10Rule` cannot use unknown type `ReflectionTrait`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level1Rule.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level1Rule::check`.'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level1Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level1Rule` cannot implement unknown type `SecurityRuleInterface`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level1Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level1Rule` cannot use unknown type `ReflectionTrait`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level2Rule.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level2Rule::check`.'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level2Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level2Rule` cannot implement unknown type `SecurityRuleInterface`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level2Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level2Rule` cannot use unknown type `ReflectionTrait`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level3Rule.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level3Rule::check`.'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level3Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level3Rule` cannot implement unknown type `SecurityRuleInterface`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level3Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level3Rule` cannot use unknown type `ReflectionTrait`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level4Rule.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level4Rule::check`.'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level4Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level4Rule` cannot implement unknown type `SecurityRuleInterface`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level4Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level4Rule` cannot use unknown type `ReflectionTrait`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level5Rule.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level5Rule::check`.'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level5Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level5Rule` cannot implement unknown type `SecurityRuleInterface`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level5Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level5Rule` cannot use unknown type `ReflectionTrait`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level6Rule.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level6Rule::check`.'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level6Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level6Rule` cannot implement unknown type `SecurityRuleInterface`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level6Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level6Rule` cannot use unknown type `ReflectionTrait`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level7Rule.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level7Rule::check`.'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level7Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level7Rule` cannot implement unknown type `SecurityRuleInterface`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level7Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level7Rule` cannot use unknown type `ReflectionTrait`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level8Rule.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level8Rule::check`.'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level8Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level8Rule` cannot implement unknown type `SecurityRuleInterface`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level8Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level8Rule` cannot use unknown type `ReflectionTrait`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level9Rule.php"
-code = "invalid-override-attribute"
-message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Rule\Level9Rule::check`.'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level9Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level9Rule` cannot implement unknown type `SecurityRuleInterface`'
-count = 1
-
-[[issues]]
-file = "src/Rule/Level9Rule.php"
-code = "non-existent-class-like"
-message = 'Class `Waffle\Commons\Security\Rule\Level9Rule` cannot use unknown type `ReflectionTrait`'
-count = 1
-
-[[issues]]
-file = "tests/src/AbstractTestCase.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `waffletests\commons\security\abstracttestcase::createandgetconfig`: expected `unknown-ref(Waffle\Commons\Contracts\Config\ConfigInterface)`, but found `PHPUnit\Framework\MockObject\MockObject&Waffle\Commons\Contracts\Config\ConfigInterface`.'
-count = 1
-
-[[issues]]
-file = "tests/src/AbstractTestCase.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "tests/src/AbstractTestCase.php"
-code = "non-existent-class-like"
-message = 'Class, Interface, or Trait `Waffle\Commons\Contracts\Config\ConfigInterface` does not exist.'
-count = 1
-
-[[issues]]
-file = "tests/src/Container/SecureContainerTest.php"
-code = "invalid-argument"
-message = 'Invalid argument type for argument #2 of `waffle\commons\security\container\securecontainer::__construct`: expected `unknown-ref(Waffle\Commons\Contracts\Security\SecurityInterface)`, but found `PHPUnit\Framework\MockObject\MockObject&Waffle\Commons\Contracts\Security\SecurityInterface`.'
-count = 6
 
 [[issues]]
 file = "tests/src/Container/SecureContainerTest.php"
@@ -244,28 +34,4 @@ count = 1
 file = "tests/src/Container/SecureContainerTest.php"
 code = "missing-override-attribute"
 message = "Missing `#[Override]` attribute on overriding method `class@anonymous:12793048998471756628-2679:3373::has`."
-count = 1
-
-[[issues]]
-file = "tests/src/Container/SecureContainerTest.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "tests/src/Container/SecureContainerTest.php"
-code = "non-existent-class-like"
-message = 'Class, Interface, or Trait `Waffle\Commons\Contracts\Security\SecurityInterface` does not exist.'
-count = 1
-
-[[issues]]
-file = "tests/src/Rule/Level6RuleTest.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `Waffle\Commons\Security\Rule\Level6Rule::check`: expected `object`, but possibly received `WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass|class-string('WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass')`.'''
-count = 1
-
-[[issues]]
-file = "tests/src/Trait/SecurityTraitTest.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `WaffleTests\Commons\Security\Trait\Helper\TraitSecurity::callissecure`: expected `object`, but possibly received `WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass|class-string('WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass')`.'''
 count = 1
