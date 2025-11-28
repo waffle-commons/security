@@ -19,14 +19,9 @@ class SecureContainerTest extends TestCase
         $security = $this->createMock(SecurityInterface::class);
         $service = new \stdClass();
 
-        $inner->expects($this->once())
-            ->method('get')
-            ->with('service_id')
-            ->willReturn($service);
+        $inner->expects($this->once())->method('get')->with('service_id')->willReturn($service);
 
-        $security->expects($this->once())
-            ->method('analyze')
-            ->with($service);
+        $security->expects($this->once())->method('analyze')->with($service);
 
         $container = new SecureContainer($inner, $security);
 
@@ -38,7 +33,8 @@ class SecureContainerTest extends TestCase
         $inner = $this->createMock(PsrContainerInterface::class);
         $security = $this->createMock(SecurityInterface::class);
 
-        $inner->method('get')
+        $inner
+            ->method('get')
             ->willThrowException(new class extends \Exception implements \Psr\Container\NotFoundExceptionInterface {});
 
         $container = new SecureContainer($inner, $security);
@@ -52,7 +48,8 @@ class SecureContainerTest extends TestCase
         $inner = $this->createMock(PsrContainerInterface::class);
         $security = $this->createMock(SecurityInterface::class);
 
-        $inner->method('get')
+        $inner
+            ->method('get')
             ->willThrowException(new class extends \Exception implements \Psr\Container\ContainerExceptionInterface {});
 
         $container = new SecureContainer($inner, $security);
@@ -66,10 +63,7 @@ class SecureContainerTest extends TestCase
         $inner = $this->createMock(PsrContainerInterface::class);
         $security = $this->createMock(SecurityInterface::class);
 
-        $inner->expects($this->once())
-            ->method('has')
-            ->with('service_id')
-            ->willReturn(true);
+        $inner->expects($this->once())->method('has')->with('service_id')->willReturn(true);
 
         $container = new SecureContainer($inner, $security);
 
@@ -79,16 +73,26 @@ class SecureContainerTest extends TestCase
     public function testSetDelegatesToInnerIfSupported(): void
     {
         $service = new \stdClass();
-        
+
         // Use anonymous class to simulate container with set method
         $inner = new class($service) implements PsrContainerInterface {
             public bool $setCalled = false;
-            public function __construct(private object $expectedService) {}
-            
-            public function get(string $id): mixed { return null; }
-            public function has(string $id): bool { return false; }
-            
-            public function set(string $id, object|callable|string $concrete): void 
+
+            public function __construct(
+                private object $expectedService,
+            ) {}
+
+            public function get(string $id): mixed
+            {
+                return null;
+            }
+
+            public function has(string $id): bool
+            {
+                return false;
+            }
+
+            public function set(string $id, object|callable|string $concrete): void
             {
                 if ($id === 'service_id' && $concrete === $this->expectedService) {
                     $this->setCalled = true;
@@ -100,7 +104,7 @@ class SecureContainerTest extends TestCase
         $container = new SecureContainer($inner, $security);
 
         $container->set('service_id', $service);
-        
+
         $this->assertTrue($inner->setCalled);
     }
 

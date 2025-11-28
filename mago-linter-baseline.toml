@@ -43,6 +43,12 @@ message = "Unused import: `Failsafe`."
 count = 1
 
 [[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "assertion-style"
+message = "Inconsistent assertions style."
+count = 3
+
+[[issues]]
 file = "tests/src/Helper/Rule3ValidObject1.php"
 code = "no-protected-in-final"
 message = "The `protected` visibility can be made `private` as the class is final."

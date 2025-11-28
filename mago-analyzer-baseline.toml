@@ -229,6 +229,36 @@ message = 'Class, Interface, or Trait `Waffle\Commons\Contracts\Config\ConfigInt
 count = 1
 
 [[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "invalid-argument"
+message = 'Invalid argument type for argument #2 of `waffle\commons\security\container\securecontainer::__construct`: expected `unknown-ref(Waffle\Commons\Contracts\Security\SecurityInterface)`, but found `PHPUnit\Framework\MockObject\MockObject&Waffle\Commons\Contracts\Security\SecurityInterface`.'
+count = 6
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "missing-override-attribute"
+message = "Missing `#[Override]` attribute on overriding method `class@anonymous:12793048998471756628-2679:3373::get`."
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "missing-override-attribute"
+message = "Missing `#[Override]` attribute on overriding method `class@anonymous:12793048998471756628-2679:3373::has`."
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "non-existent-class-like"
+message = 'Class, Interface, or Trait `Waffle\Commons\Contracts\Security\SecurityInterface` does not exist.'
+count = 1
+
+[[issues]]
 file = "tests/src/Rule/Level6RuleTest.php"
 code = "possibly-invalid-argument"
 message = '''Possible argument type mismatch for argument #1 of `Waffle\Commons\Security\Rule\Level6Rule::check`: expected `object`, but possibly received `WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass|class-string('WaffleTests\Commons\Security\Trait\Helper\UninitializedPropertyClass')`.'''
