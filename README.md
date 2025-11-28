@@ -23,22 +23,35 @@ composer require waffle-commons/security
 
 ```php
 use Waffle\Commons\Security\Security;
+use Waffle\Commons\Config\Config;
 
-$security = new Security();
+// Initialize Security with Config
+$config = new Config('/path/to/config', 'prod');
+$security = new Security($config);
 
-// Check if the current context allows an action
-if ($security->isGranted('ROLE_ADMIN')) {
-    // ...
-}
+// Analyze an object against security rules
+$security->analyze($myObject);
 ```
 
 ### Security Rules
 
-You can define security rules to restrict access to specific parts of your application.
+The security component analyzes objects to ensure they meet specific criteria (e.g., immutability, final classes) based on the configured security level.
 
-```php
-use Waffle\Commons\Security\Rule\PathRule;
+Testing
+-------
 
-// Deny access to /admin unless user has ROLE_ADMIN
-$rule = new PathRule('/admin', ['ROLE_ADMIN']);
-```=========
+To run the tests, use the following command:
+
+```bash
+composer tests
+```
+
+Contributing
+------------
+
+Contributions are welcome! Please refer to [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
+
+License
+-------
+
+This project is licensed under the MIT License. See the [LICENSE.md](./LICENSE.md) file for details.=========
