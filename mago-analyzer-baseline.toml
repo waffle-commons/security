@@ -13,6 +13,18 @@ message = 'Class `Waffle\Commons\Security\Abstract\AbstractSecurity` cannot impl
 count = 1
 
 [[issues]]
+file = "src/Container/SecureContainer.php"
+code = "invalid-override-attribute"
+message = 'Invalid `#[Override]` attribute on `Waffle\Commons\Security\Container\SecureContainer::set`.'
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "non-existent-class-like"
+message = 'Class `Waffle\Commons\Security\Container\SecureContainer` cannot implement unknown type `ContainerInterface`'
+count = 1
+
+[[issues]]
 file = "src/Exception/SecurityException.php"
 code = "non-existent-class-like"
 message = 'Class `Waffle\Commons\Security\Exception\SecurityException` cannot implement unknown type `SecurityExceptionInterface`'
