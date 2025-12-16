@@ -1,0 +1,67 @@
+variant = "loose"
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 1
+
+[[issues]]
+file = "src/Rule/Level2Rule.php"
+code = "prefer-early-continue"
+message = "Consider using early continue pattern to reduce nesting."
+count = 1
+
+[[issues]]
+file = "src/Rule/Level5Rule.php"
+code = "prefer-early-continue"
+message = "Consider using early continue pattern to reduce nesting."
+count = 1
+
+[[issues]]
+file = "src/Rule/Level6Rule.php"
+code = "prefer-early-continue"
+message = "Consider using early continue pattern to reduce nesting."
+count = 1
+
+[[issues]]
+file = "src/Trait/SecurityTrait.php"
+code = "prefer-early-continue"
+message = "Consider using early continue pattern to reduce nesting."
+count = 2
+
+[[issues]]
+file = "tests/src/AbstractTestCase.php"
+code = "no-redundant-use"
+message = "Unused import: `Config`."
+count = 1
+
+[[issues]]
+file = "tests/src/AbstractTestCase.php"
+code = "no-redundant-use"
+message = "Unused import: `Failsafe`."
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "assertion-style"
+message = "Inconsistent assertions style."
+count = 3
+
+[[issues]]
+file = "tests/src/Helper/Rule3ValidObject1.php"
+code = "no-protected-in-final"
+message = "The `protected` visibility can be made `private` as the class is final."
+count = 1
+
+[[issues]]
+file = "tests/src/Helper/Rule7ValidObject.php"
+code = "no-boolean-flag-parameter"
+message = "Avoid boolean flag parameters."
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1

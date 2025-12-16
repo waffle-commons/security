@@ -1,0 +1,37 @@
+variant = "loose"
+
+[[issues]]
+file = "src/Abstract/AbstractSecurity.php"
+code = "invalid-property-read"
+message = 'Cannot read from write-only property `Waffle\Commons\Security\Abstract\AbstractSecurity::$level` - property only has a set hook.'
+count = 1
+
+[[issues]]
+file = "src/Abstract/AbstractSecurity.php"
+code = "no-value"
+message = 'Argument #2 passed to method `waffle\commons\security\trait\securitytrait::issecure` has type `never`, meaning it cannot produce a value.'
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "invalid-throw"
+message = 'Cannot throw type `Waffle\Commons\Contracts\Security\Exception\SecurityExceptionInterface` because it is not an instance of Throwable.'
+count = 1
+
+[[issues]]
+file = "src/Exception/SecurityException.php"
+code = "missing-override-attribute"
+message = 'Missing `#[Override]` attribute on overriding method `Waffle\Commons\Security\Exception\SecurityException::serialize`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "missing-override-attribute"
+message = "Missing `#[Override]` attribute on overriding method `class@anonymous:12793048998471756628-2679:3373::get`."
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "missing-override-attribute"
+message = "Missing `#[Override]` attribute on overriding method `class@anonymous:12793048998471756628-2679:3373::has`."
+count = 1
