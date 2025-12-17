@@ -30,9 +30,11 @@ trait SecurityTrait
         }
 
         foreach ($expectations as $expectation) {
-            if (!$object instanceof $expectation) {
-                return false;
+            if ($object instanceof $expectation) {
+                continue;
             }
+
+            return false;
         }
 
         return true;
@@ -58,9 +60,11 @@ trait SecurityTrait
         ];
 
         for ($i = 1; $i <= $level; ++$i) {
-            if (isset($rules[$i])) {
-                $rules[$i]->check($object);
+            if (!isset($rules[$i])) {
+                continue;
             }
+
+            $rules[$i]->check($object);
         }
     }
 }

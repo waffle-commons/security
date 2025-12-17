@@ -17,6 +17,7 @@ final class SecurityException extends Exception implements SecurityExceptionInte
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function serialize(): array
     {
         return [

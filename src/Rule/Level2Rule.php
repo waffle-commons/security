@@ -28,12 +28,14 @@ class Level2Rule implements SecurityRuleInterface
         $class = get_class($object);
 
         foreach ($properties as $property) {
-            if ($property->getType() === null) {
-                throw new SecurityException(
-                    message: "Level 2: Public property '{$property->getName()}' in {$class} must be typed.",
-                    code: 500,
-                );
+            if ($property->getType() !== null) {
+                continue;
             }
+
+            throw new SecurityException(
+                message: "Level 2: Public property '{$property->getName()}' in {$class} must be typed.",
+                code: 500,
+            );
         }
     }
 }
