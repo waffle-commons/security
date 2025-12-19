@@ -1,0 +1,91 @@
+variant = "loose"
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "literal-named-argument"
+message = "Literal argument `'set'` should be passed as a named argument for clarity."
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 1
+
+[[issues]]
+file = "src/Rule/Level3Rule.php"
+code = "literal-named-argument"
+message = "Literal argument `'__'` should be passed as a named argument for clarity."
+count = 1
+
+[[issues]]
+file = "src/Rule/Level4Rule.php"
+code = "literal-named-argument"
+message = "Literal argument `'__'` should be passed as a named argument for clarity."
+count = 1
+
+[[issues]]
+file = "src/Rule/Level8Rule.php"
+code = "literal-named-argument"
+message = "Literal argument `'Controller'` should be passed as a named argument for clarity."
+count = 1
+
+[[issues]]
+file = "src/Rule/Level9Rule.php"
+code = "literal-named-argument"
+message = "Literal argument `'Service'` should be passed as a named argument for clarity."
+count = 1
+
+[[issues]]
+file = "src/Rule/Level9Rule.php"
+code = "literal-named-argument"
+message = '''Literal argument `'WaffleTests\\'` should be passed as a named argument for clarity.'''
+count = 1
+
+[[issues]]
+file = "src/Rule/Level9Rule.php"
+code = "literal-named-argument"
+message = '''Literal argument `'Waffle\\'` should be passed as a named argument for clarity.'''
+count = 1
+
+[[issues]]
+file = "tests/src/Helper/Rule7ValidObject.php"
+code = "no-boolean-flag-parameter"
+message = "Avoid boolean flag parameters."
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level2RuleTest.php"
+code = "literal-named-argument"
+message = '''Literal argument `'\\\\'` should be passed as a named argument for clarity.'''
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level3RuleTest.php"
+code = "literal-named-argument"
+message = '''Literal argument `'\\\\'` should be passed as a named argument for clarity.'''
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level4RuleTest.php"
+code = "literal-named-argument"
+message = '''Literal argument `'\\\\'` should be passed as a named argument for clarity.'''
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level5RuleTest.php"
+code = "literal-named-argument"
+message = '''Literal argument `'\\\\'` should be passed as a named argument for clarity.'''
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level6RuleTest.php"
+code = "literal-named-argument"
+message = '''Literal argument `'\\\\'` should be passed as a named argument for clarity.'''
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "too-many-methods"
+message = "Class has too many methods."
+count = 1

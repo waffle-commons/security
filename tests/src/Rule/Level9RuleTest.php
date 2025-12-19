@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Rule;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Waffle\Commons\Security\Exception\SecurityException;
 use Waffle\Commons\Security\Rule\Level9Rule;
@@ -12,7 +13,6 @@ use WaffleTests\Commons\Security\Helper\Rule9ViolationName;
 use WaffleTests\Commons\Security\Helper\Service\AbstractService;
 use WaffleTests\Commons\Security\Helper\Service\NonReadOnlyService;
 use WaffleTests\Commons\Security\Trait\Helper\FinalReadOnlyClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 // A service violating the rule
 // A service respecting the rule (assuming it's readonly or abstract)

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Exception;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Waffle\Commons\Security\Exception\SecurityException;
 
 #[CoversClass(SecurityException::class)]
@@ -20,7 +20,7 @@ class SecurityExceptionCoverageTest extends TestCase
             'message' => 'Test Message',
             'code' => 123,
         ];
-        
+
         static::assertSame($expected, $exception->serialize());
     }
 }

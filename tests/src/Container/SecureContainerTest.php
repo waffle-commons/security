@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Container;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
 use Waffle\Commons\Security\Container\SecureContainer;
 use Waffle\Commons\Security\Exception\ContainerException;
 use Waffle\Commons\Security\Exception\NotFoundException;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class SecureContainerTest extends TestCase
