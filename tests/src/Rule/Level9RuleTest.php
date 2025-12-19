@@ -12,12 +12,14 @@ use WaffleTests\Commons\Security\Helper\Rule9ViolationName;
 use WaffleTests\Commons\Security\Helper\Service\AbstractService;
 use WaffleTests\Commons\Security\Helper\Service\NonReadOnlyService;
 use WaffleTests\Commons\Security\Trait\Helper\FinalReadOnlyClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 // A service violating the rule
 // A service respecting the rule (assuming it's readonly or abstract)
 // A readonly class respecting the rule
 
 #[CoversClass(Level9Rule::class)]
+#[AllowMockObjectsWithoutExpectations]
 final class Level9RuleTest extends TestCase
 {
     private Level9Rule $rule;
