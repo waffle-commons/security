@@ -17,7 +17,7 @@ final class Rule3ValidObject1
     }
 
     // Private/protected methods are ignored by this rule implicitly via filter
-    protected function protectedMethod(): void
+    private function protectedMethod(): void
     {
     }
 

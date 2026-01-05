@@ -30,24 +30,15 @@ abstract class AbstractSecurity implements SecurityInterface
     public function analyze(object $object, array $expectations = []): void
     {
         $className = get_class($object);
-        $expects = implode(
-            separator: Constant::ARRAY_SEPARATOR_ALL,
-            array: $expectations,
-        );
-        if (!$this->isValid(
-            object: $object,
-            expectations: $expectations,
-        )) {
+        $expects = implode(separator: Constant::ARRAY_SEPARATOR_ALL, array: $expectations);
+        if (!$this->isValid(object: $object, expectations: $expectations)) {
             throw new SecurityException(
                 message: "The object {$className} is not valid. It is not an instance of {$expects}.",
                 code: 500,
             );
         }
         try {
-            $this->isSecure(
-                object: $object,
-                level: $this->level,
-            );
+            $this->isSecure(object: $object, level: $this->level);
         } catch (SecurityException $exception) {
             throw new SecurityException(
                 message: "The object {$className} is not secure.",

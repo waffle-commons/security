@@ -19,7 +19,7 @@ class TraitSecurity
      * @param string[] $expectations
      * @return bool
      */
-    public function callIsValid(null|object $object, array $expectations): bool
+    public function callIsValid(?object $object, array $expectations): bool
     {
         return $this->isValid($object, $expectations);
     }

@@ -24,12 +24,14 @@ class Level6Rule implements SecurityRuleInterface
         $class = get_class($object);
 
         foreach ($properties as $property) {
-            if (!$property->isInitialized(object: $object) && $property->getDeclaringClass()->getName() === $class) {
-                throw new SecurityException(
-                    message: "Level 6: Property '{$property->getName()}' in {$class} is not initialized.",
-                    code: 500,
-                );
+            if (!(!$property->isInitialized(object: $object) && $property->getDeclaringClass()->getName() === $class)) {
+                continue;
             }
+
+            throw new SecurityException(
+                message: "Level 6: Property '{$property->getName()}' in {$class} is not initialized.",
+                code: 500,
+            );
         }
     }
 }

@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace WaffleTests\Commons\Security;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
-use Waffle\Commons\Config\Config;
 use Waffle\Commons\Contracts\Config\ConfigInterface;
-use Waffle\Commons\Contracts\Enum\Failsafe;
 use Waffle\Commons\Security\Security;
 
 abstract class AbstractTestCase extends BaseTestCase
@@ -20,7 +18,7 @@ abstract class AbstractTestCase extends BaseTestCase
         return $configMock;
     }
 
-    protected function createAndGetSecurity(int $level = 10, null|ConfigInterface $config = null): Security
+    protected function createAndGetSecurity(int $level = 10, ?ConfigInterface $config = null): Security
     {
         $configMock = $this->createAndGetConfig(securityLevel: $level);
 

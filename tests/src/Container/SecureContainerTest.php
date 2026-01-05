@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Container;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
@@ -11,6 +12,7 @@ use Waffle\Commons\Security\Container\SecureContainer;
 use Waffle\Commons\Security\Exception\ContainerException;
 use Waffle\Commons\Security\Exception\NotFoundException;
 
+#[AllowMockObjectsWithoutExpectations]
 class SecureContainerTest extends TestCase
 {
     public function testGetDelegatesToInnerAndAnalyzesSecurity(): void
@@ -25,7 +27,7 @@ class SecureContainerTest extends TestCase
 
         $container = new SecureContainer($inner, $security);
 
-        $this->assertSame($service, $container->get('service_id'));
+        static::assertSame($service, $container->get('service_id'));
     }
 
     public function testGetThrowsNotFoundException(): void
@@ -67,7 +69,7 @@ class SecureContainerTest extends TestCase
 
         $container = new SecureContainer($inner, $security);
 
-        $this->assertTrue($container->has('service_id'));
+        static::assertTrue($container->has('service_id'));
     }
 
     public function testSetDelegatesToInnerIfSupported(): void
@@ -82,11 +84,13 @@ class SecureContainerTest extends TestCase
                 private object $expectedService,
             ) {}
 
+            #[\Override]
             public function get(string $id): mixed
             {
                 return null;
             }
 
+            #[\Override]
             public function has(string $id): bool
             {
                 return false;
@@ -105,7 +109,7 @@ class SecureContainerTest extends TestCase
 
         $container->set('service_id', $service);
 
-        $this->assertTrue($inner->setCalled);
+        static::assertTrue($inner->setCalled);
     }
 
     public function testSetThrowsExceptionIfInnerDoesNotSupportSet(): void

@@ -19,9 +19,6 @@ final class ConcreteTestSecurity extends AbstractSecurity
      */
     public function __construct(ConfigInterface $config)
     {
-        $this->level = $config->getInt(
-            key: 'waffle.security.level',
-            default: 1,
-        );
+        $this->level = $config->getInt(key: 'waffle.security.level', default: 1);
     }
 }

@@ -23,16 +23,18 @@ trait SecurityTrait
      * @param string[] $expectations
      * @return bool
      */
-    public function isValid(null|object $object = null, array $expectations = []): bool
+    public function isValid(?object $object = null, array $expectations = []): bool
     {
         if (null === $object) {
             return false;
         }
 
         foreach ($expectations as $expectation) {
-            if (!$object instanceof $expectation) {
-                return false;
+            if ($object instanceof $expectation) {
+                continue;
             }
+
+            return false;
         }
 
         return true;
@@ -58,9 +60,11 @@ trait SecurityTrait
         ];
 
         for ($i = 1; $i <= $level; ++$i) {
-            if (isset($rules[$i])) {
-                $rules[$i]->check($object);
+            if (!isset($rules[$i])) {
+                continue;
             }
+
+            $rules[$i]->check($object);
         }
     }
 }

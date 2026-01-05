@@ -21,19 +21,18 @@ class Level2Rule implements SecurityRuleInterface
     #[\Override]
     public function check(object $object): void
     {
-        $properties = $this->getProperties(
-            object: $object,
-            filter: ReflectionProperty::IS_PUBLIC,
-        );
+        $properties = $this->getProperties(object: $object, filter: ReflectionProperty::IS_PUBLIC);
         $class = get_class($object);
 
         foreach ($properties as $property) {
-            if ($property->getType() === null) {
-                throw new SecurityException(
-                    message: "Level 2: Public property '{$property->getName()}' in {$class} must be typed.",
-                    code: 500,
-                );
+            if ($property->getType() !== null) {
+                continue;
             }
+
+            throw new SecurityException(
+                message: "Level 2: Public property '{$property->getName()}' in {$class} must be typed.",
+                code: 500,
+            );
         }
     }
 }

@@ -21,19 +21,18 @@ class Level5Rule implements SecurityRuleInterface
     #[\Override]
     public function check(object $object): void
     {
-        $properties = $this->getProperties(
-            object: $object,
-            filter: ReflectionProperty::IS_PRIVATE,
-        );
+        $properties = $this->getProperties(object: $object, filter: ReflectionProperty::IS_PRIVATE);
         $class = get_class($object);
 
         foreach ($properties as $property) {
-            if ($property->getType() === null && $property->getDeclaringClass()->getName() === $class) {
-                throw new SecurityException(
-                    message: "Level 5: Private property '{$property->getName()}' in {$class} must be typed.",
-                    code: 500,
-                );
+            if (!($property->getType() === null && $property->getDeclaringClass()->getName() === $class)) {
+                continue;
             }
+
+            throw new SecurityException(
+                message: "Level 5: Private property '{$property->getName()}' in {$class} must be typed.",
+                code: 500,
+            );
         }
     }
 }

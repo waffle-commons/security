@@ -19,19 +19,637 @@ message = 'Cannot throw type `Waffle\Commons\Contracts\Security\Exception\Securi
 count = 1
 
 [[issues]]
-file = "src/Exception/SecurityException.php"
-code = "missing-override-attribute"
-message = 'Missing `#[Override]` attribute on overriding method `Waffle\Commons\Security\Exception\SecurityException::serialize`.'
+file = "src/Container/SecureContainer.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\ContainerException` in `Waffle\Commons\Security\Container\SecureContainer::set`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Abstract/AbstractSecurityTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Abstract\AbstractSecurityTest::testAnalyzeSucceedsWithValidObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Abstract/AbstractSecurityTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Contracts\Config\Exception\InvalidConfigurationExceptionInterface` in `WaffleTests\Commons\Security\Abstract\AbstractSecurityTest::testAnalyzeSucceedsWithValidObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Abstract/AbstractSecurityTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Contracts\Config\Exception\InvalidConfigurationExceptionInterface` in `WaffleTests\Commons\Security\Abstract\AbstractSecurityTest::testAnalyzeThrowsExceptionForInsecureObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Abstract/AbstractSecurityTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Contracts\Config\Exception\InvalidConfigurationExceptionInterface` in `WaffleTests\Commons\Security\Abstract\AbstractSecurityTest::testAnalyzeThrowsExceptionForInvalidObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Abstract/AbstractSecurityTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Abstract\AbstractSecurityTest::testAnalyzeSucceedsWithValidObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Abstract/AbstractSecurityTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Abstract\AbstractSecurityTest::testAnalyzeThrowsExceptionForInsecureObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Abstract/AbstractSecurityTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Abstract\AbstractSecurityTest::testAnalyzeThrowsExceptionForInvalidObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/AbstractTestCase.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Event\NoPreviousThrowableException` in `WaffleTests\Commons\Security\AbstractTestCase::createAndGetConfig`.'
+count = 1
+
+[[issues]]
+file = "tests/src/AbstractTestCase.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\InvalidArgumentException` in `WaffleTests\Commons\Security\AbstractTestCase::createAndGetConfig`.'
+count = 1
+
+[[issues]]
+file = "tests/src/AbstractTestCase.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\MockObject\Exception` in `WaffleTests\Commons\Security\AbstractTestCase::createAndGetConfig`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerEdgeCaseTest.php"
+code = "missing-return-statement"
+message = "Missing return statement in function 'get'"
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerEdgeCaseTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Event\NoPreviousThrowableException` in `WaffleTests\Commons\Security\Container\SecureContainerEdgeCaseTest::testSetThrowsExceptionIfInnerContainerDoesNotSupportSet`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerEdgeCaseTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\InvalidArgumentException` in `WaffleTests\Commons\Security\Container\SecureContainerEdgeCaseTest::testSetThrowsExceptionIfInnerContainerDoesNotSupportSet`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerEdgeCaseTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\MockObject\Exception` in `WaffleTests\Commons\Security\Container\SecureContainerEdgeCaseTest::testSetThrowsExceptionIfInnerContainerDoesNotSupportSet`.'
 count = 1
 
 [[issues]]
 file = "tests/src/Container/SecureContainerTest.php"
-code = "missing-override-attribute"
-message = "Missing `#[Override]` attribute on overriding method `class@anonymous:12793048998471756628-2679:3373::get`."
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Event\NoPreviousThrowableException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetDelegatesToInnerAndAnalyzesSecurity`.'
 count = 1
 
 [[issues]]
 file = "tests/src/Container/SecureContainerTest.php"
-code = "missing-override-attribute"
-message = "Missing `#[Override]` attribute on overriding method `class@anonymous:12793048998471756628-2679:3373::has`."
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Event\NoPreviousThrowableException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetThrowsContainerException`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Event\NoPreviousThrowableException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetThrowsNotFoundException`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Event\NoPreviousThrowableException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testHasDelegatesToInner`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Event\NoPreviousThrowableException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testSetDelegatesToInnerIfSupported`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Event\NoPreviousThrowableException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testSetThrowsExceptionIfInnerDoesNotSupportSet`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetDelegatesToInnerAndAnalyzesSecurity`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testHasDelegatesToInner`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testSetDelegatesToInnerIfSupported`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\InvalidArgumentException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetDelegatesToInnerAndAnalyzesSecurity`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\InvalidArgumentException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetThrowsContainerException`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\InvalidArgumentException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetThrowsNotFoundException`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\InvalidArgumentException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testHasDelegatesToInner`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\InvalidArgumentException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testSetDelegatesToInnerIfSupported`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\InvalidArgumentException` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testSetThrowsExceptionIfInnerDoesNotSupportSet`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\MockObject\Exception` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetDelegatesToInnerAndAnalyzesSecurity`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\MockObject\Exception` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetThrowsContainerException`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\MockObject\Exception` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetThrowsNotFoundException`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\MockObject\Exception` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testHasDelegatesToInner`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\MockObject\Exception` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testSetDelegatesToInnerIfSupported`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\MockObject\Exception` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testSetThrowsExceptionIfInnerDoesNotSupportSet`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Psr\Container\ContainerExceptionInterface` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetDelegatesToInnerAndAnalyzesSecurity`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Psr\Container\ContainerExceptionInterface` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetThrowsContainerException`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Psr\Container\ContainerExceptionInterface` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetThrowsNotFoundException`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Psr\Container\NotFoundExceptionInterface` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetDelegatesToInnerAndAnalyzesSecurity`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Psr\Container\NotFoundExceptionInterface` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetThrowsContainerException`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Container/SecureContainerTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Psr\Container\NotFoundExceptionInterface` in `WaffleTests\Commons\Security\Container\SecureContainerTest::testGetThrowsNotFoundException`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Exception/SecurityExceptionCoverageTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Exception\SecurityExceptionCoverageTest::testSerializeReturnsArray`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Exception/SecurityExceptionTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\Exception` in `WaffleTests\Commons\Security\Exception\SecurityExceptionTest::testExceptionBehavior`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Exception/SecurityExceptionTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Exception\SecurityExceptionTest::testExceptionBehavior`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Exception/SecurityExceptionTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\UnknownClassOrInterfaceException` in `WaffleTests\Commons\Security\Exception\SecurityExceptionTest::testExceptionBehavior`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level10RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level10RuleTest::testCheckPassesForFinalClass`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level10RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level10RuleTest::testCheckPassesForFinalClass`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level10RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level10RuleTest::testCheckThrowsExceptionForNonFinalClass`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level1RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level1RuleTest::testCheckPassesForValidObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level1RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level1RuleTest::testCheckPassesForValidObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level2RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level2RuleTest::testCheckPassesForValidClass`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level2RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level2RuleTest::testCheckPassesForValidClass`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level2RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level2RuleTest::testCheckThrowsExceptionForUntypedPublicProperty`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level3RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level3RuleTest::testCheckIgnoresMagicMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level3RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level3RuleTest::testCheckPassesForValidMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level3RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level3RuleTest::testCheckIgnoresMagicMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level3RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level3RuleTest::testCheckPassesForValidMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level3RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level3RuleTest::testCheckThrowsExceptionForPublicVoidMethod`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level4RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level4RuleTest::testCheckIgnoresInheritedUntypedMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level4RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level4RuleTest::testCheckIgnoresMagicMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level4RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level4RuleTest::testCheckPassesForFullyTypedMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level4RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level4RuleTest::testCheckIgnoresInheritedUntypedMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level4RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level4RuleTest::testCheckIgnoresMagicMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level4RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level4RuleTest::testCheckPassesForFullyTypedMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level4RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level4RuleTest::testCheckThrowsExceptionForMissingReturnType`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level5RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level5RuleTest::testCheckIgnoresInheritedUntypedPrivateProperties`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level5RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level5RuleTest::testCheckPassesForTypedPrivateProperties`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level5RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level5RuleTest::testCheckIgnoresInheritedUntypedPrivateProperties`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level5RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level5RuleTest::testCheckPassesForTypedPrivateProperties`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level5RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level5RuleTest::testCheckThrowsExceptionForUntypedPrivateProperty`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level6RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level6RuleTest::testCheckIgnoresInheritedUninitializedProperties`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level6RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level6RuleTest::testCheckPassesForInitializedProperties`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level6RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level6RuleTest::testCheckIgnoresInheritedUninitializedProperties`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level6RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level6RuleTest::testCheckPassesForInitializedProperties`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level6RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level6RuleTest::testCheckThrowsExceptionForUninitializedProperty`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level7RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level7RuleTest::testCheckIgnoresInheritedMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level7RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level7RuleTest::testCheckPassesForStrictlyTypedArguments`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level7RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level7RuleTest::testCheckIgnoresInheritedMethods`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level7RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level7RuleTest::testCheckPassesForStrictlyTypedArguments`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level7RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level7RuleTest::testCheckThrowsExceptionForMixedArgumentWithoutDefault`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level8RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level8RuleTest::testCheckPassesForValidClasses`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level8RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level8RuleTest::testCheckPassesForValidClasses`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level8RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level8RuleTest::testCheckThrowsExceptionForNonFinalController`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Event\NoPreviousThrowableException` in `WaffleTests\Commons\Security\Rule\Level9RuleTest::testCheckPassesForAbstractService`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level9RuleTest::testCheckPassesForAbstractService`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level9RuleTest::testCheckPassesForNonFrameworkService`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Rule\Level9RuleTest::testCheckPassesForReadOnlyClass`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\InvalidArgumentException` in `WaffleTests\Commons\Security\Rule\Level9RuleTest::testCheckPassesForAbstractService`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\MockObject\Exception` in `WaffleTests\Commons\Security\Rule\Level9RuleTest::testCheckPassesForAbstractService`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level9RuleTest::testCheckPassesForAbstractService`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level9RuleTest::testCheckPassesForNonFrameworkService`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level9RuleTest::testCheckPassesForReadOnlyClass`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Rule/Level9RuleTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Rule\Level9RuleTest::testCheckThrowsExceptionForNonReadOnlyService`.'
+count = 1
+
+[[issues]]
+file = "tests/src/SecurityTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\SecurityTest::testConstructorSetsSecurityLevelFromConfiguration`.'
+count = 1
+
+[[issues]]
+file = "tests/src/SecurityTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `ReflectionException` in `WaffleTests\Commons\Security\SecurityTest::testConstructorSetsSecurityLevelFromConfiguration`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Trait\SecurityTraitTest::testIsSecurePassesWithValidObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Trait\SecurityTraitTest::testIsValidReturnsFalseForMismatchedExpectations`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Trait\SecurityTraitTest::testIsValidReturnsTrueForMatchingExpectations`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Trait\SecurityTraitTest::testIsValidWithEmptyExpectations`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Trait\SecurityTraitTest::testIsValidWithMultipleExpectationsMixed`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `PHPUnit\Framework\ExpectationFailedException` in `WaffleTests\Commons\Security\Trait\SecurityTraitTest::testIsValidWithNullObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Trait\SecurityTraitTest::testIsSecurePassesWithValidObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Trait\SecurityTraitTest::testIsSecureThrowsExceptionForNonReadOnlyServiceLevel9`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Trait\SecurityTraitTest::testIsSecureThrowsExceptionForUninitializedPropertyLevel6`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Trait/SecurityTraitTest.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Trait\SecurityTraitTest::testIsSecureThrowsExceptionOnViolation`.'
 count = 1

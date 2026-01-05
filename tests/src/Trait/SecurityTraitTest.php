@@ -75,24 +75,15 @@ final class SecurityTraitTest extends TestCase
         static::expectException(SecurityException::class);
         static::expectExceptionMessageMatches($expectedExceptionMessage);
 
-        $this->traitObject->callIsSecure(
-            object: $violatingObject,
-            level: $securityLevel,
-        );
+        $this->traitObject->callIsSecure(object: $violatingObject, level: $securityLevel);
     }
 
     public function testIsSecurePassesWithValidObject(): void
     {
         $validObject = new FinalReadOnlyClass();
 
-        $this->traitObject->callIsSecure(
-            object: $validObject,
-            level: 1,
-        );
-        $this->traitObject->callIsSecure(
-            object: $validObject,
-            level: 5,
-        );
+        $this->traitObject->callIsSecure(object: $validObject, level: 1);
+        $this->traitObject->callIsSecure(object: $validObject, level: 5);
         $this->traitObject->callIsSecure(object: $validObject);
 
         static::assertTrue(true);
@@ -123,10 +114,7 @@ final class SecurityTraitTest extends TestCase
         $objectWithoutConstructor = $reflectionClass->newInstanceWithoutConstructor();
 
         // 3. Action: Run the security check. It should now detect the uninitialized property.
-        $this->traitObject->callIsSecure(
-            object: $objectWithoutConstructor,
-            level: 6,
-        );
+        $this->traitObject->callIsSecure(object: $objectWithoutConstructor, level: 6);
     }
 
     public function testIsSecureThrowsExceptionForNonReadOnlyServiceLevel9(): void
@@ -137,10 +125,7 @@ final class SecurityTraitTest extends TestCase
         // We create a dummy class that simulates a framework service that is not readonly.
         $nonReadOnlyService = new NonReadOnlyService();
 
-        $this->traitObject->callIsSecure(
-            object: $nonReadOnlyService,
-            level: 9,
-        );
+        $this->traitObject->callIsSecure(object: $nonReadOnlyService, level: 9);
     }
 
     public function testIsValidWithMultipleExpectationsMixed(): void

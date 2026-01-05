@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Rule;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Waffle\Commons\Security\Exception\SecurityException;
 use Waffle\Commons\Security\Rule\Level9Rule;
@@ -18,6 +19,7 @@ use WaffleTests\Commons\Security\Trait\Helper\FinalReadOnlyClass;
 // A readonly class respecting the rule
 
 #[CoversClass(Level9Rule::class)]
+#[AllowMockObjectsWithoutExpectations]
 final class Level9RuleTest extends TestCase
 {
     private Level9Rule $rule;

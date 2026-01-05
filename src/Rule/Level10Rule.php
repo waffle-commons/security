@@ -21,10 +21,7 @@ class Level10Rule implements SecurityRuleInterface
     public function check(object $object): void
     {
         if (!$this->isFinal(object: $object)) {
-            throw new SecurityException(
-                message: 'Level 10: All classes must be declared final.',
-                code: 500,
-            );
+            throw new SecurityException(message: 'Level 10: All classes must be declared final.', code: 500);
         }
     }
 }
