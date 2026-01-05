@@ -21,10 +21,7 @@ class Level2Rule implements SecurityRuleInterface
     #[\Override]
     public function check(object $object): void
     {
-        $properties = $this->getProperties(
-            object: $object,
-            filter: ReflectionProperty::IS_PUBLIC,
-        );
+        $properties = $this->getProperties(object: $object, filter: ReflectionProperty::IS_PUBLIC);
         $class = get_class($object);
 
         foreach ($properties as $property) {

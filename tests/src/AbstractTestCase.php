@@ -18,7 +18,7 @@ abstract class AbstractTestCase extends BaseTestCase
         return $configMock;
     }
 
-    protected function createAndGetSecurity(int $level = 10, null|ConfigInterface $config = null): Security
+    protected function createAndGetSecurity(int $level = 10, ?ConfigInterface $config = null): Security
     {
         $configMock = $this->createAndGetConfig(securityLevel: $level);
 

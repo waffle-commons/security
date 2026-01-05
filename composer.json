@@ -1,6 +1,6 @@
 {
     "name": "waffle-commons/security",
-    "version": "0.1.0-alpha3",
+    "version": "0.1.0-alpha4",
     "description": "Security component for Waffle framework.",
     "type": "library",
     "license": "MIT",

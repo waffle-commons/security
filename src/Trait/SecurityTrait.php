@@ -23,7 +23,7 @@ trait SecurityTrait
      * @param string[] $expectations
      * @return bool
      */
-    public function isValid(null|object $object = null, array $expectations = []): bool
+    public function isValid(?object $object = null, array $expectations = []): bool
     {
         if (null === $object) {
             return false;
