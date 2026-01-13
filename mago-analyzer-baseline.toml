@@ -14,6 +14,12 @@ count = 1
 
 [[issues]]
 file = "src/Container/SecureContainer.php"
+code = "docblock-type-mismatch"
+message = "Docblock return type `mixed` is incompatible with native return type `object`."
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
 code = "invalid-throw"
 message = 'Cannot throw type `Waffle\Commons\Contracts\Security\Exception\SecurityExceptionInterface` because it is not an instance of Throwable.'
 count = 1
