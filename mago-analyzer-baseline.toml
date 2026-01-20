@@ -20,14 +20,92 @@ count = 1
 
 [[issues]]
 file = "src/Container/SecureContainer.php"
+code = "invalid-property-access"
+message = 'Attempting to access a property on a non-object type (`unknown-ref(Waffle\Commons\Contracts\Security\Attribute\Voter)`).'
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `waffle\commons\security\container\securecontainer::discoverrules`: expected `array<array-key, unknown-ref(Waffle\Commons\Contracts\Security\Attribute\Voter)>`, but found `list<Waffle\Commons\Contracts\Security\Attribute\Voter>`.'
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
 code = "invalid-throw"
 message = 'Cannot throw type `Waffle\Commons\Contracts\Security\Exception\SecurityExceptionInterface` because it is not an instance of Throwable.'
 count = 1
 
 [[issues]]
 file = "src/Container/SecureContainer.php"
+code = "non-existent-class-like"
+message = 'Class, Interface, or Trait `Waffle\Commons\Contracts\Security\VoterInterface` does not exist.'
+count = 2
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "non-existent-method"
+message = 'Method `decide` does not exist on type `Waffle\Commons\Contracts\Security\VoterInterface`.'
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "null-argument"
+message = 'Argument #1 of method `Waffle\Commons\Security\Container\SecureContainer::vote` is `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #1 of `reflectionclass::__construct`: expected `('T.reflectionclass extends object)|class-string<'T.reflectionclass extends object>`, but possibly received `string`."
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
 code = "unhandled-thrown-type"
 message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\ContainerException` in `Waffle\Commons\Security\Container\SecureContainer::set`.'
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "unhandled-thrown-type"
+message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `Waffle\Commons\Security\Container\SecureContainer::vote`.'
+count = 1
+
+[[issues]]
+file = "src/Container/SecureContainer.php"
+code = "unknown-class-instantiation"
+message = "Cannot determine the concrete class for instantiation."
+count = 1
+
+[[issues]]
+file = "src/Middleware/SecurityMiddleware.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 4
+
+[[issues]]
+file = "src/Middleware/SecurityMiddleware.php"
+code = "no-value"
+message = 'Argument #1 passed to method `Psr\Http\Message\ServerRequestInterface::getattribute` has type `never`, meaning it cannot produce a value.'
+count = 2
+
+[[issues]]
+file = "src/Middleware/SecurityMiddleware.php"
+code = "non-existent-class-constant"
+message = "Class-like constant `_CLASSNAME` does not exist."
+count = 1
+
+[[issues]]
+file = "src/Middleware/SecurityMiddleware.php"
+code = "non-existent-class-constant"
+message = "Class-like constant `_METHOD` does not exist."
+count = 1
+
+[[issues]]
+file = "src/Middleware/SecurityMiddleware.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
 count = 1
 
 [[issues]]
