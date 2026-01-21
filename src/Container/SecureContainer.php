@@ -160,4 +160,18 @@ final readonly class SecureContainer implements ContainerInterface
             );
         }
     }
+
+    /**
+     * Clean all stateful services
+     * This method is called by the Kernel at the end of each worker loop
+     */
+    public function reset(): void
+    {
+        foreach ($this->instances as $_ => $service) {
+            if ($service instanceof ResettableInterface) {
+                // The service knows how to clean itself
+                $service->reset();
+            }
+        }
+    }
 }
