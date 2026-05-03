@@ -6,7 +6,5 @@ namespace WaffleTests\Commons\Security\Helper;
 
 class Rule7ChildMethod
 {
-    public function childMethod(string $_name): void
-    {
-    }
+    public function childMethod(string $_name): void {}
 }

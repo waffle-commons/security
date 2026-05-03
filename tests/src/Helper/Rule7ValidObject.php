@@ -6,15 +6,9 @@ namespace WaffleTests\Commons\Security\Helper;
 
 class Rule7ValidObject
 {
-    public function process(string $_name, int $_id, bool $_isActive = true): void
-    {
-    }
+    public function process(string $_name, int $_id, bool $_isActive = true): void {}
 
-    public function usesMixedWithDefault(mixed $_data = null): void // Allowed if default is present
-    {
-    }
+    public function usesMixedWithDefault(mixed $_data = null): void {} // Allowed if default is present
 
-    protected function protectedMethod($_untyped): void
-    {
-    } // Ignored
+    protected function protectedMethod($_untyped): void {} // Ignored
 }

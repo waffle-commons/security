@@ -6,7 +6,5 @@ namespace WaffleTests\Commons\Security\Helper;
 
 class Rule7InvalidObject
 {
-    public function process(mixed $_untypedArgument): void // Violation
-    {
-    }
+    public function process(mixed $_untypedArgument): void {} // Violation
 }

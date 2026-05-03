@@ -10,7 +10,5 @@ namespace WaffleTests\Commons\Security\Helper;
  */
 class Rule4UntypedParent // Not final, intended for extension
 {
-    public function untypedParentMethod()
-    {
-    }
+    public function untypedParentMethod() {}
 }
