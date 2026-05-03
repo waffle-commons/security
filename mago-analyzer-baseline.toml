@@ -2,18 +2,6 @@ variant = "loose"
 
 [[issues]]
 file = "src/Container/SecureContainer.php"
-code = "invalid-property-access"
-message = 'Attempting to access a property on a non-object type (`unknown-ref(Waffle\Commons\Contracts\Security\Attribute\Voter)`).'
-count = 1
-
-[[issues]]
-file = "src/Container/SecureContainer.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `Waffle\Commons\Security\Container\SecureContainer::discoverRules`: expected `array<array-key, unknown-ref(Waffle\Commons\Contracts\Security\Attribute\Voter)>`, but found `list<Waffle\Commons\Contracts\Security\Attribute\Voter>`.'
-count = 1
-
-[[issues]]
-file = "src/Container/SecureContainer.php"
 code = "invalid-throw"
 message = 'Cannot throw type `Waffle\Commons\Contracts\Security\Exception\SecurityExceptionInterface` because it is not an instance of Throwable.'
 count = 1
@@ -27,26 +15,8 @@ count = 1
 [[issues]]
 file = "src/Container/SecureContainer.php"
 code = "non-existent-class-like"
-message = 'Cannot find class, interface, enum, or type alias `Waffle\Commons\Contracts\Security\Attribute\Voter`.'
-count = 1
-
-[[issues]]
-file = "src/Container/SecureContainer.php"
-code = "non-existent-class-like"
-message = 'Class, Interface, or Trait `Waffle\Commons\Contracts\Security\VoterInterface` does not exist.'
-count = 3
-
-[[issues]]
-file = "src/Container/SecureContainer.php"
-code = "non-existent-class-like"
 message = 'Class, Interface, or Trait `Waffle\Commons\Security\Container\ResettableInterface` does not exist.'
 count = 3
-
-[[issues]]
-file = "src/Container/SecureContainer.php"
-code = "non-existent-method"
-message = 'Method `decide` does not exist on type `Waffle\Commons\Contracts\Security\VoterInterface`.'
-count = 1
 
 [[issues]]
 file = "src/Container/SecureContainer.php"
@@ -58,12 +28,6 @@ count = 1
 file = "src/Container/SecureContainer.php"
 code = "non-existent-property"
 message = 'Property `$instances` does not exist on class `Waffle\Commons\Security\Container\SecureContainer`.'
-count = 1
-
-[[issues]]
-file = "src/Container/SecureContainer.php"
-code = "null-argument"
-message = 'Argument #1 of method `Waffle\Commons\Security\Container\SecureContainer::vote` is `null`, but parameter type `string` does not accept it.'
 count = 1
 
 [[issues]]
@@ -104,26 +68,14 @@ count = 4
 
 [[issues]]
 file = "src/Middleware/SecurityMiddleware.php"
-code = "no-value"
-message = 'Argument #1 passed to method `Psr\Http\Message\ServerRequestInterface::getAttribute` has type `never`, meaning it cannot produce a value.'
-count = 2
-
-[[issues]]
-file = "src/Middleware/SecurityMiddleware.php"
-code = "non-existent-class-constant"
-message = "Class-like constant `_CLASSNAME` does not exist."
-count = 1
-
-[[issues]]
-file = "src/Middleware/SecurityMiddleware.php"
-code = "non-existent-class-constant"
-message = "Class-like constant `_METHOD` does not exist."
-count = 1
-
-[[issues]]
-file = "src/Middleware/SecurityMiddleware.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "src/Security.php"
+code = "invalid-property-assignment-value"
+message = "Invalid type for property `$level`: expected `int`, but got `int|null`."
 count = 1
 
 [[issues]]
@@ -166,6 +118,12 @@ count = 1
 file = "tests/src/Abstract/AbstractSecurityTest.php"
 code = "unhandled-thrown-type"
 message = 'Potentially unhandled exception `Waffle\Commons\Security\Exception\SecurityException` in `WaffleTests\Commons\Security\Abstract\AbstractSecurityTest::testAnalyzeThrowsExceptionForInvalidObject`.'
+count = 1
+
+[[issues]]
+file = "tests/src/Abstract/Helper/ConcreteTestSecurity.php"
+code = "invalid-property-assignment-value"
+message = "Invalid type for property `$level`: expected `int`, but got `int|null`."
 count = 1
 
 [[issues]]
