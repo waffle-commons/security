@@ -21,9 +21,7 @@ class SecureContainerEdgeCaseTest extends TestCase
         // PsrContainerInterface does not have set method.
         // We create an anonymous class implementing ONLY PsrContainerInterface
         $inner = new class implements PsrContainerInterface {
-            public function get(string $id)
-            {
-            }
+            public function get(string $id) {}
 
             public function has(string $id): bool
             {

@@ -169,9 +169,7 @@ final class SecurityTraitTest extends TestCase
         $msg3 = "/Level 3: Public method 'getSomething' in class@anonymous.* must not return 'void'./";
         yield 'Level 3 Violation: Public method returns void' => [
             'violatingObject' => new class {
-                public function getSomething(): void
-                {
-                }
+                public function getSomething(): void {}
             },
             'securityLevel' => 3,
             'expectedExceptionMessage' => $msg3,
@@ -181,9 +179,7 @@ final class SecurityTraitTest extends TestCase
         $msg4 = "/Level 4: Public method 'getSomething' in class@anonymous.* must declare a return type./";
         yield 'Level 4 Violation: A public method with no declared return type' => [
             'violatingObject' => new class {
-                public function getSomething()
-                {
-                }
+                public function getSomething() {}
             },
             'securityLevel' => 4,
             'expectedExceptionMessage' => $msg4,

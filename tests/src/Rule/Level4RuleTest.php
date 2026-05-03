@@ -35,13 +35,9 @@ final class Level4RuleTest extends TestCase
                 return 'hello';
             }
 
-            public function getVoid(): void // Void is allowed by Level 4, just not *missing*
-            {
-            }
+            public function getVoid(): void {} // Void is allowed by Level 4, just not *missing*
 
-            protected function protectedUntyped()
-            {
-            } // Ignored
+            protected function protectedUntyped() {} // Ignored
         };
 
         // No exception should be thrown
