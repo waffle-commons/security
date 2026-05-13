@@ -33,6 +33,7 @@ final readonly class SecureContainer implements ContainerInterface
     public function __construct(
         private PsrContainerInterface $inner,
         private SecurityInterface $security,
+        private array $instances = [],
     ) {}
 
     /**

@@ -6,7 +6,9 @@ namespace WaffleTests\Commons\Security\Helper;
 
 class Rule7ValidObject
 {
-    public function process(string $_name, int $_id, bool $_isActive = true): void {}
+    public function activate(string $_name, int $_id): void {}
+
+    public function deactivate(string $_name, int $_id): void {}
 
     public function usesMixedWithDefault(mixed $_data = null): void {} // Allowed if default is present
 

@@ -55,7 +55,7 @@ final class Level4RuleTest extends TestCase
 
         static::expectException(SecurityException::class);
         // Escape backslashes for the fully qualified class name in the regex
-        $escapedClassName = str_replace('\\', '\\\\', $className);
+        $escapedClassName = str_replace(search: '\\', replace: '\\\\', subject: $className);
         static::expectExceptionMessageMatches(
             "/Level 4: Public method 'noReturnType' in {$escapedClassName} must declare a return type./",
         );
