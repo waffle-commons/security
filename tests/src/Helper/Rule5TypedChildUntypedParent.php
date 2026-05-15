@@ -6,5 +6,5 @@ namespace WaffleTests\Commons\Security\Helper;
 
 final class Rule5TypedChildUntypedParent extends Rule5UntypedPrivateParent
 {
-    private string $typedPrivateChild = 'ok';
+    private string $_typedPrivateChild = 'ok';
 }

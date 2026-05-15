@@ -15,7 +15,7 @@ abstract class AbstractSecurity implements SecurityInterface
     use SecurityTrait;
 
     protected(set) int $level {
-        set => $this->level = $value ?? 1;
+        set => $this->level = $value;
     }
 
     abstract public function __construct(ConfigInterface $cfg);

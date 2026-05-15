@@ -94,12 +94,12 @@ final class SecurityMiddlewareTest extends TestCase
             ->method('warning')
             ->with(
                 static::stringContains('Access denied'),
-                static::callback(static function (array $ctx): bool {
-                    return (
+                static::callback(
+                    static fn(array $ctx): bool => (
                         ($ctx['ip'] ?? null) === '127.0.0.1'
                         && ($ctx['target'] ?? null) === DenyingController::class . '::action'
-                    );
-                }),
+                    ),
+                ),
             );
 
         $middleware = new SecurityMiddleware(secureContainer: $this->makeContainer(), logger: $logger);

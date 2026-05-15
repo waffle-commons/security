@@ -170,10 +170,11 @@ final readonly class SecureContainer implements ContainerInterface
     public function reset(): void
     {
         foreach ($this->instances as $_ => $service) {
-            if ($service instanceof ResettableInterface) {
-                // The service knows how to clean itself
-                $service->reset();
+            if (!$service instanceof ResettableInterface) {
+                continue;
             }
+
+            $service->reset();
         }
     }
 }

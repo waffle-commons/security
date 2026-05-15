@@ -7,5 +7,5 @@ namespace WaffleTests\Commons\Security\Helper;
 final class Rule2ValidObject1
 {
     public string $typedProperty = 'hello';
-    private $untypedPrivate; // Should be ignored by Level 2
+    private $_untypedPrivate; // Should be ignored by Level 2
 }

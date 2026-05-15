@@ -7,5 +7,5 @@ namespace WaffleTests\Commons\Security\Helper;
 final class Rule2ValidObject2
 {
     // No public properties
-    private string $privateOnly = 'secret';
+    private string $_privateOnly = 'secret';
 }

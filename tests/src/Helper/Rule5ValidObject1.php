@@ -6,6 +6,6 @@ namespace WaffleTests\Commons\Security\Helper;
 
 class Rule5ValidObject1
 {
-    private string $typedPrivate = 'secret';
+    private string $_typedPrivate = 'secret';
     public $untypedPublic; // Ignored by Level 5
 }
