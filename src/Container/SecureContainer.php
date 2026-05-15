@@ -16,6 +16,7 @@ use Waffle\Commons\Contracts\Security\Attribute\Voter;
 use Waffle\Commons\Contracts\Security\Exception\SecurityExceptionInterface;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
 use Waffle\Commons\Contracts\Security\VoterInterface;
+use Waffle\Commons\Contracts\Service\ResettableInterface;
 use Waffle\Commons\Security\Exception\ContainerException;
 use Waffle\Commons\Security\Exception\NotFoundException;
 use Waffle\Commons\Security\Exception\SecurityException;
