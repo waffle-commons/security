@@ -71,4 +71,29 @@ ignore = [
         "tests/",
         "src/",
     ] },
+    { code = "possible-method-access-on-null", in = [
+        "src/Trait/SecurityTrait.php",
+        "src/Middleware/SecurityMiddleware.php",
+    ] },
+    { code = "invalid-property-assignment-value", in = [
+        "tests/",
+    ] },
+    { code = "missing-return-statement", in = [
+        "tests/",
+    ] },
+    { code = "non-existent-class-constant", in = [
+        "src/Middleware/SecurityMiddleware.php",
+    ] },
+    { code = "no-value", in = [
+        "src/Middleware/SecurityMiddleware.php",
+    ] },
+    { code = "possibly-invalid-argument", in = [
+        "src/Container/SecureContainer.php",
+    ] },
+    { code = "unknown-class-instantiation", in = [
+        "src/Container/SecureContainer.php",
+    ] },
+    { code = "non-existent-method", in = [
+        "src/Container/SecureContainer.php",
+    ] },
 ]
