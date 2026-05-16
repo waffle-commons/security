@@ -1,6 +1,6 @@
 {
     "name": "waffle-commons/security",
-    "version": "0.1.0-alpha5",
+    "version": "0.1.0-beta0",
     "description": "Security component for Waffle framework.",
     "type": "library",
     "license": "MIT",
@@ -23,8 +23,8 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^8.5",
-        "waffle-commons/contracts": "^0.1.0-alpha6",
-        "waffle-commons/utils": "^0.1.0-alpha6",
+        "waffle-commons/contracts": "self.version",
+        "waffle-commons/utils": "self.version",
         "psr/container": "^2.0",
         "psr/http-server-middleware": "^1.0",
         "psr/log": "^3.0"
@@ -40,6 +40,7 @@
         "formatter": "vendor/bin/mago fmt",
         "linter": "vendor/bin/mago lint",
         "analyzer": "vendor/bin/mago analyze",
+        "guard": "vendor/bin/mago guard",
         "phpunit": "vendor/bin/phpunit --log-junit var/data/phpunit-coverage/junit.xml --coverage-html var/data/phpunit-coverage",
         "benchmark": [
             "Composer\\Config::disableProcessTimeout",
@@ -48,7 +49,8 @@
         "mago": [
             "@formatter",
             "@linter",
-            "@analyzer"
+            "@analyzer",
+            "@guard"
         ],
         "tests": [
             "@phpunit"
@@ -69,5 +71,23 @@
             "carthage-software/mago": true,
             "cyclonedx/cyclonedx-php-composer": true
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "canonical": false,
+            "url": "../contracts",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "canonical": false,
+            "url": "../utils",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
 }
