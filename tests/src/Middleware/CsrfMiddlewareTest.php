@@ -179,7 +179,7 @@ final class CsrfMiddlewareTest extends TestCase
         $manager->expects(static::once())->method('validate')->willReturn(true);
         $middleware = new CsrfMiddleware($manager);
 
-        $request = $this->createMock(ServerRequestInterface::class);
+        $request = $this->createStub(ServerRequestInterface::class);
         $request->method('getMethod')->willReturn('POST');
         $request
             ->method('getAttribute')
@@ -211,7 +211,7 @@ final class CsrfMiddlewareTest extends TestCase
         ?array $parsedBody = null,
         array $cookies = [],
     ): ServerRequestInterface {
-        $request = $this->createMock(ServerRequestInterface::class);
+        $request = $this->createStub(ServerRequestInterface::class);
         $request->method('getMethod')->willReturn($method);
         $request
             ->method('getAttribute')
