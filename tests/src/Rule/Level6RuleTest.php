@@ -51,7 +51,7 @@ final class Level6RuleTest extends TestCase
 
         static::expectException(SecurityException::class);
         $className = UninitializedPropertyClass::class;
-        $escapedClassName = str_replace('\\', '\\\\', $className);
+        $escapedClassName = str_replace(search: '\\', replace: '\\\\', subject: $className);
         static::expectExceptionMessageMatches(
             "#Level 6: Property 'uninitializedProperty' in {$escapedClassName} is not initialized.#",
         );

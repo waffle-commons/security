@@ -10,5 +10,5 @@ namespace WaffleTests\Commons\Security\Helper;
  */
 class Rule5UntypedPrivateParent // Not final, intended for extension
 {
-    private $untypedPrivateParent; // This is not accessible to the child anyway
+    private $_untypedPrivateParent; // This is not accessible to the child anyway
 }

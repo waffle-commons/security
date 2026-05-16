@@ -31,8 +31,8 @@ class SecurityMiddleware implements MiddlewareInterface
     {
         // 1. Extract destination information from Request Attributes
         // We use generic strings to decouple Security from Routing DTOs/Attributes.
-        $controller = $request->getAttribute(Constant::_CLASSNAME);
-        $method = $request->getAttribute(Constant::_METHOD);
+        $controller = $request->getAttribute(Constant::ATTR_CLASSNAME);
+        $method = $request->getAttribute(Constant::ATTR_METHOD);
 
         // 2. Fallback check: Some routers might provide the controller as an array [Class, Method]
         if (is_array($controller) && $method === null) {

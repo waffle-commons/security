@@ -60,7 +60,7 @@ trait SecurityTrait
         ];
 
         for ($i = 1; $i <= $level; ++$i) {
-            if (!isset($rules[$i])) {
+            if (!array_key_exists($i, $rules)) {
                 continue;
             }
 

@@ -50,7 +50,7 @@ final class Level5RuleTest extends TestCase
 
         static::expectException(SecurityException::class);
         // Escape backslashes for the fully qualified class name in the regex
-        $escapedClassName = str_replace('\\', '\\\\', $className);
+        $escapedClassName = str_replace(search: '\\', replace: '\\\\', subject: $className);
         static::expectExceptionMessageMatches(
             "/Level 5: Private property 'untypedPrivate' in {$escapedClassName} must be typed./",
         );

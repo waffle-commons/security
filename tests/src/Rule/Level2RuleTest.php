@@ -50,7 +50,7 @@ final class Level2RuleTest extends TestCase
 
         static::expectException(SecurityException::class);
         // Escape backslashes for the fully qualified class name in the regex
-        $escapedClassName = str_replace('\\', '\\\\', $className);
+        $escapedClassName = str_replace(search: '\\', replace: '\\\\', subject: $className);
         static::expectExceptionMessageMatches(
             "/Level 2: Public property 'untypedPublic' in {$escapedClassName} must be typed./",
         );

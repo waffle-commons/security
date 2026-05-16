@@ -46,7 +46,7 @@ final class Level3RuleTest extends TestCase
 
         static::expectException(SecurityException::class);
         // Escape backslashes for the fully qualified class name in the regex
-        $escapedClassName = str_replace('\\', '\\\\', $className);
+        $escapedClassName = str_replace(search: '\\', replace: '\\\\', subject: $className);
         static::expectExceptionMessageMatches(
             "/Level 3: Public method 'doSomething' in {$escapedClassName} must not return 'void'./",
         );
