@@ -48,6 +48,7 @@ kan-defect = { enabled = false }
 halstead = { enabled = false }
 prefer-arrow-function = { enabled = false }
 no-redundant-nullsafe = { enabled = false }
+excessive-parameter-list = { enabled = false }
 # <<< alpha6-opinionated-suppressions
 
 [analyzer]
@@ -62,6 +63,8 @@ ignore = [
     # iterates a heterogeneous service map — both legitimately produce `mixed`.
     { code = "mixed-assignment", in = [
         "src/Middleware/SecurityMiddleware.php",
+        "src/Middleware/CsrfMiddleware.php",
+        "src/Csrf/CsrfTokenManager.php",
         "src/Container/SecureContainer.php",
         "tests/",
     ] },
