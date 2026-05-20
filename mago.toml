@@ -268,4 +268,12 @@ ignore = [
     { code = "unused-pragma", in = ["src/", "tests/"] },
     { code = "non-existent-catch-type", in = ["tests/"] },
     { code = "unevaluated-code", in = ["src/", "tests/"] },
+
+    # ----- Beta 1: LevelN rules inject ReflectionInspector from path-resolved
+    # waffle-commons/utils. Mago 1.27 cannot read the service's return types
+    # across the vendor symlink, so foreach/string ops on its return values
+    # surface as mixed-typed false positives. Runtime is correct.
+    { code = "invalid-iterator", in = ["src/Rule/"] },
+    { code = "mixed-argument", in = ["src/Rule/"] },
+    { code = "mixed-operand", in = ["src/Rule/"] },
 ]

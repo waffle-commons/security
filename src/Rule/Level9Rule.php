@@ -7,12 +7,9 @@ namespace Waffle\Commons\Security\Rule;
 use ReflectionObject;
 use Waffle\Commons\Contracts\Security\SecurityRuleInterface;
 use Waffle\Commons\Security\Exception\SecurityException;
-use Waffle\Commons\Utils\Trait\ReflectionTrait;
 
 class Level9Rule implements SecurityRuleInterface
 {
-    use ReflectionTrait;
-
     /**
      * Security Level 9: Immutability.
      * [Rule 9]: Ensures classes are read-only (simulating the PHP 8.2+ `readonly` attribute for services/DTOs).
