@@ -15,6 +15,8 @@ use WaffleTests\Commons\Security\Helper\Controller\AllowingController;
 use WaffleTests\Commons\Security\Helper\Controller\DenyingController;
 use WaffleTests\Commons\Security\Helper\Controller\MisconfiguredVoterController;
 use WaffleTests\Commons\Security\Helper\Controller\MissingVoterClassController;
+use WaffleTests\Commons\Security\Helper\Controller\PublicAccessClassController;
+use WaffleTests\Commons\Security\Helper\Controller\PublicAccessMethodController;
 use WaffleTests\Commons\Security\Helper\Controller\UnvotedController;
 
 #[CoversClass(SecureContainer::class)]
@@ -29,13 +31,39 @@ final class SecureContainerAnalyzeTest extends TestCase
         );
     }
 
-    public function testAnalyzeNoVotersIsNoOp(): void
+    public function testAnalyzeWithNoVotersAndNoPublicAccessFailsClosed(): void
     {
-        // A successful analyze() with zero #[Voter] attributes simply returns.
-        $this->makeContainer()->analyze(UnvotedController::class, 'action');
+        // SEC-02: missing policy is treated as deny, not allow.
+        $this->expectException(SecurityException::class);
+        $this->expectExceptionCode(403);
+        $this->expectExceptionMessage('not marked #[PublicAccess]');
 
-        // No exception thrown = success.
+        $this->makeContainer()->analyze(UnvotedController::class, 'action');
+    }
+
+    public function testAnalyzeWithClassLevelPublicAccessPermitsAction(): void
+    {
+        // A class-level `#[PublicAccess]` opts every action out of fail-closed.
+        $this->makeContainer()->analyze(PublicAccessClassController::class, 'action');
+
         $this->expectNotToPerformAssertions();
+    }
+
+    public function testAnalyzeWithMethodLevelPublicAccessPermitsAction(): void
+    {
+        // A method-level `#[PublicAccess]` is enough on its own.
+        $this->makeContainer()->analyze(PublicAccessMethodController::class, 'publicAction');
+
+        $this->expectNotToPerformAssertions();
+    }
+
+    public function testAnalyzeWithSiblingPublicAccessStillFailsClosedForUnmarkedMethod(): void
+    {
+        // Method-level `#[PublicAccess]` on one action does NOT exempt its sibling.
+        $this->expectException(SecurityException::class);
+        $this->expectExceptionCode(403);
+
+        $this->makeContainer()->analyze(PublicAccessMethodController::class, 'defaultAction');
     }
 
     public function testAnalyzeWithAllowingVotersSucceeds(): void

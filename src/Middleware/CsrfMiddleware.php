@@ -20,8 +20,12 @@ use Waffle\Commons\Security\Csrf\Exception\MissingCsrfTokenException;
 /**
  * PSR-15 middleware enforcing `#[RequiresCsrfToken]` attribute-driven CSRF checks.
  *
- * Pipeline placement (canonical Alpha 6 order):
- *   ErrorHandler → TrustedHost → Routing → **Csrf** → Security → SecureHeaders → Dispatcher
+ * Pipeline placement (canonical Beta-1 order):
+ *   ErrorHandler → TrustedHost → AnonymousSession → Routing → **Csrf** → Security → SecureHeaders → Dispatcher
+ *
+ * The anonymous-session middleware MUST run before this one — its
+ * `_anon_sid` request attribute is the session-binding payload folded into
+ * the CSRF HMAC. Without it, every validation deterministically fails-closed.
  *
  * Routing publishes `_classname`/`_method` request attributes; this middleware reads
  * them, reflects on the controller method to find a `#[RequiresCsrfToken]` attribute,
@@ -62,7 +66,15 @@ final class CsrfMiddleware implements MiddlewareInterface
             throw new MissingCsrfTokenException(tokenId: $tokenId);
         }
 
-        if (!$this->tokenManager->validate($tokenId, $candidate)) {
+        // SEC-01 option C: bind validation to the per-browser anonymous SID
+        // published by AnonymousSessionMiddleware. A missing attribute means
+        // the pipeline is misconfigured — treat as invalid token to fail-closed.
+        $sessionId = $request->getAttribute(CsrfConstant::SESSION_REQUEST_ATTRIBUTE);
+        if (!is_string($sessionId) || $sessionId === '') {
+            throw new InvalidCsrfTokenException(tokenId: $tokenId);
+        }
+
+        if (!$this->tokenManager->validate($tokenId, $sessionId, $candidate)) {
             throw new InvalidCsrfTokenException(tokenId: $tokenId);
         }
 

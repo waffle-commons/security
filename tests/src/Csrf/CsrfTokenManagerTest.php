@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace WaffleTests\Commons\Security\Csrf;
 
-use DateInterval;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Waffle\Commons\Contracts\Cache\CacheInterface;
 use Waffle\Commons\Security\Csrf\CsrfToken;
 use Waffle\Commons\Security\Csrf\CsrfTokenManager;
 
@@ -15,10 +14,32 @@ use Waffle\Commons\Security\Csrf\CsrfTokenManager;
 #[CoversClass(CsrfToken::class)]
 final class CsrfTokenManagerTest extends TestCase
 {
-    public function testIssueProducesUrlSafeRandomTokenAndStoresIt(): void
+    private string $secret;
+    private string $sid;
+
+    #[\Override]
+    protected function setUp(): void
     {
-        $cache = $this->arrayCache();
-        $token = new CsrfTokenManager($cache)->issue('form:login');
+        parent::setUp();
+        // 32 random bytes — the minimum the manager accepts. Generated per test
+        // so no literal sensitive value lives in source.
+        $this->secret = random_bytes(32);
+        // Stand-in for the anonymous SID that AnonymousSessionMiddleware would
+        // publish on the request in production.
+        $this->sid = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
+    }
+
+    public function testConstructorRejectsShortSecret(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('at least 32 bytes');
+
+        new CsrfTokenManager(secret: random_bytes(10));
+    }
+
+    public function testIssueProducesUrlSafeBase64TokenAndMetadata(): void
+    {
+        $token = new CsrfTokenManager($this->secret)->issue('form:login', $this->sid);
 
         static::assertSame('form:login', $token->getId());
         static::assertMatchesRegularExpression('/^[A-Za-z0-9_\-]+$/', $token->getValue());
@@ -27,218 +48,149 @@ final class CsrfTokenManagerTest extends TestCase
 
     public function testIssueWithExplicitTtlOverridesDefault(): void
     {
-        $cache = $this->arrayCache();
-        $token = new CsrfTokenManager($cache, defaultTtl: 60)->issue('form:login', ttlSeconds: 900);
+        $token = new CsrfTokenManager($this->secret, defaultTtl: 60)->issue('form:login', $this->sid, ttlSeconds: 900);
 
         $expiresAt = $token->getExpiresAt();
         static::assertNotNull($expiresAt);
-        $issuedAt = $token->getIssuedAt();
-        $diff = $expiresAt->getTimestamp() - $issuedAt->getTimestamp();
+        $diff = $expiresAt->getTimestamp() - $token->getIssuedAt()->getTimestamp();
         static::assertSame(900, $diff);
     }
 
-    public function testIssueWithZeroOrNegativeTtlMeansNeverExpires(): void
+    public function testIssueWithZeroTtlMeansNeverExpires(): void
     {
-        $cache = $this->arrayCache();
-        $token = new CsrfTokenManager($cache)->issue('eternal', ttlSeconds: 0);
+        $token = new CsrfTokenManager($this->secret)->issue('eternal', $this->sid, ttlSeconds: 0);
         static::assertNull($token->getExpiresAt());
+    }
+
+    public function testIssueRejectsEmptySessionId(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('session id must not be empty');
+
+        new CsrfTokenManager($this->secret)->issue('form:login', '');
     }
 
     public function testValidateAcceptsFreshlyIssuedToken(): void
     {
-        $cache = $this->arrayCache();
-        $manager = new CsrfTokenManager($cache);
-        $token = $manager->issue('form:login');
+        $manager = new CsrfTokenManager($this->secret);
+        $token = $manager->issue('form:login', $this->sid);
 
-        static::assertTrue($manager->validate('form:login', $token->getValue()));
+        static::assertTrue($manager->validate('form:login', $this->sid, $token->getValue()));
     }
 
-    public function testValidateRejectsMismatch(): void
+    public function testValidateAcceptsNonExpiringToken(): void
     {
-        $cache = $this->arrayCache();
-        $manager = new CsrfTokenManager($cache);
-        $manager->issue('form:login');
+        $manager = new CsrfTokenManager($this->secret);
+        $token = $manager->issue('eternal', $this->sid, ttlSeconds: 0);
 
-        static::assertFalse($manager->validate('form:login', 'forged-value'));
+        static::assertTrue($manager->validate('eternal', $this->sid, $token->getValue()));
     }
 
-    public function testValidateReturnsFalseForUnknownId(): void
+    public function testValidateRejectsTokenIssuedForDifferentId(): void
     {
-        $manager = new CsrfTokenManager($this->arrayCache());
-        static::assertFalse($manager->validate('never-issued', 'any'));
+        // The id is folded into the HMAC payload, so cross-id replay must fail.
+        $manager = new CsrfTokenManager($this->secret);
+        $token = $manager->issue('form:login', $this->sid);
+
+        static::assertFalse($manager->validate('form:account-deletion', $this->sid, $token->getValue()));
     }
 
-    public function testValidateReturnsFalseAndDeletesExpiredEntry(): void
+    public function testValidateRejectsTokenIssuedForDifferentSessionId(): void
     {
-        $cache = $this->arrayCache();
-        $manager = new CsrfTokenManager($cache);
+        // SEC-01 option C: sessionId is folded into the HMAC payload, so a
+        // token minted for one browser cannot validate against another.
+        $manager = new CsrfTokenManager($this->secret);
+        $token = $manager->issue('form:login', $this->sid);
 
-        // Bypass `issue()` so we can construct an already-expired payload.
-        $reflection = new \ReflectionClass(CsrfTokenManager::class);
-        $keyForMethod = $reflection->getMethod('keyFor');
-        $key = $keyForMethod->invoke($manager, 'stale');
-
-        $cache->set($key, [
-            'id' => 'stale',
-            'value' => 'old',
-            'issued_at' => new \DateTimeImmutable('-2 hours')->format(\DateTimeImmutable::ATOM),
-            'expires_at' => new \DateTimeImmutable('-1 hour')->format(\DateTimeImmutable::ATOM),
-        ]);
-
-        static::assertFalse($manager->validate('stale', 'old'));
-        static::assertFalse($cache->has($key), 'expired entry must be purged after validation attempt');
+        $otherSid = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
+        static::assertFalse($manager->validate('form:login', $otherSid, $token->getValue()));
     }
 
-    public function testHasValidReflectsCacheState(): void
+    public function testValidateRejectsEmptySessionId(): void
     {
-        $cache = $this->arrayCache();
-        $manager = new CsrfTokenManager($cache);
+        $manager = new CsrfTokenManager($this->secret);
+        $token = $manager->issue('form:login', $this->sid);
 
-        static::assertFalse($manager->hasValid('form:login'));
-        $manager->issue('form:login');
-        static::assertTrue($manager->hasValid('form:login'));
+        static::assertFalse($manager->validate('form:login', '', $token->getValue()));
     }
 
-    public function testRefreshIssuesNewTokenAndInvalidatesOld(): void
+    public function testValidateRejectsTokenSignedWithDifferentSecret(): void
     {
-        $cache = $this->arrayCache();
-        $manager = new CsrfTokenManager($cache);
+        $issuer = new CsrfTokenManager($this->secret);
+        $token = $issuer->issue('form:login', $this->sid);
 
-        $first = $manager->issue('form:login');
-        $second = $manager->refresh('form:login');
+        $verifier = new CsrfTokenManager(random_bytes(32));
+        static::assertFalse($verifier->validate('form:login', $this->sid, $token->getValue()));
+    }
+
+    public function testValidateRejectsExpiredToken(): void
+    {
+        $manager = new CsrfTokenManager($this->secret);
+        $token = $manager->issue('form:login', $this->sid, ttlSeconds: 1);
+
+        // Wait past the expiry. 1-second granularity in the wire timestamp.
+        sleep(2);
+
+        static::assertFalse($manager->validate('form:login', $this->sid, $token->getValue()));
+    }
+
+    public function testValidateRejectsTamperedToken(): void
+    {
+        $manager = new CsrfTokenManager($this->secret);
+        $token = $manager->issue('form:login', $this->sid);
+        $value = $token->getValue();
+
+        // Flip a single base64url-safe character anywhere past the nonce region.
+        $mutated = $value[0] === 'a' ? 'b' . substr($value, 1) : 'a' . substr($value, 1);
+
+        static::assertFalse($manager->validate('form:login', $this->sid, $mutated));
+    }
+
+    public function testValidateRejectsTruncatedToken(): void
+    {
+        $manager = new CsrfTokenManager($this->secret);
+        $token = $manager->issue('form:login', $this->sid);
+
+        static::assertFalse($manager->validate('form:login', $this->sid, substr($token->getValue(), 0, -4)));
+    }
+
+    public function testValidateRejectsCompletelyMalformedInput(): void
+    {
+        $manager = new CsrfTokenManager($this->secret);
+
+        static::assertFalse($manager->validate('form:login', $this->sid, ''));
+        static::assertFalse($manager->validate('form:login', $this->sid, '%%%not-base64%%%'));
+        static::assertFalse($manager->validate('form:login', $this->sid, 'short'));
+    }
+
+    public function testRefreshIssuesNewToken(): void
+    {
+        $manager = new CsrfTokenManager($this->secret);
+
+        $first = $manager->issue('form:login', $this->sid);
+        $second = $manager->refresh('form:login', $this->sid);
 
         static::assertNotSame($first->getValue(), $second->getValue());
-        static::assertFalse($manager->validate('form:login', $first->getValue()));
-        static::assertTrue($manager->validate('form:login', $second->getValue()));
+        // Both remain valid until expiry — there is no server-side inventory.
+        static::assertTrue($manager->validate('form:login', $this->sid, $first->getValue()));
+        static::assertTrue($manager->validate('form:login', $this->sid, $second->getValue()));
     }
 
-    public function testRevokeRemovesStoredToken(): void
+    public function testRevokeIsNoOpInStatelessImplementation(): void
     {
-        $cache = $this->arrayCache();
-        $manager = new CsrfTokenManager($cache);
-        $manager->issue('form:login');
-
+        $manager = new CsrfTokenManager($this->secret);
+        $token = $manager->issue('form:login', $this->sid);
         $manager->revoke('form:login');
+
+        // Stateless manager cannot invalidate individual tokens.
+        static::assertTrue($manager->validate('form:login', $this->sid, $token->getValue()));
+    }
+
+    public function testHasValidAlwaysReturnsFalseInStatelessImplementation(): void
+    {
+        $manager = new CsrfTokenManager($this->secret);
+        $manager->issue('form:login', $this->sid);
+
         static::assertFalse($manager->hasValid('form:login'));
-    }
-
-    public function testLoadRejectsMalformedPayloads(): void
-    {
-        $cache = $this->arrayCache();
-        $manager = new CsrfTokenManager($cache);
-
-        $reflection = new \ReflectionClass(CsrfTokenManager::class);
-        $keyForMethod = $reflection->getMethod('keyFor');
-        $key = $keyForMethod->invoke($manager, 'corrupt');
-
-        // Missing required keys → load() returns null → validate() returns false.
-        $cache->set($key, ['something' => 'else']);
-        static::assertFalse($manager->validate('corrupt', 'anything'));
-
-        // Non-array payload → same result.
-        $cache->set($key, 'not-an-array');
-        static::assertFalse($manager->validate('corrupt', 'anything'));
-
-        // Unparsable issued_at → reject.
-        $cache->set($key, [
-            'id' => 'corrupt',
-            'value' => 'v',
-            'issued_at' => 'not-a-date',
-            'expires_at' => null,
-        ]);
-        static::assertFalse($manager->validate('corrupt', 'v'));
-    }
-
-    public function testLoadGracefullyHandlesInvalidExpiresAtString(): void
-    {
-        $cache = $this->arrayCache();
-        $manager = new CsrfTokenManager($cache);
-
-        $reflection = new \ReflectionClass(CsrfTokenManager::class);
-        $keyForMethod = $reflection->getMethod('keyFor');
-        $key = $keyForMethod->invoke($manager, 'partial');
-
-        $cache->set($key, [
-            'id' => 'partial',
-            'value' => 'v',
-            'issued_at' => new \DateTimeImmutable()->format(\DateTimeImmutable::ATOM),
-            'expires_at' => 'not-a-date',
-        ]);
-
-        // Unparsable expires_at → treated as never-expires, validate succeeds.
-        static::assertTrue($manager->validate('partial', 'v'));
-    }
-
-    /**
-     * Minimal in-memory CacheInterface stub. Reused across tests to avoid pulling
-     * in waffle-commons/cache as a require-dev (agnosticism rule).
-     */
-    private function arrayCache(): CacheInterface
-    {
-        return new class implements CacheInterface {
-            /** @var array<string, mixed> */
-            private array $store = [];
-
-            #[\Override]
-            public function get(string $key, mixed $default = null): mixed
-            {
-                return $this->store[$key] ?? $default;
-            }
-
-            #[\Override]
-            public function set(string $key, mixed $value, null|int|DateInterval $ttl = null): bool
-            {
-                $this->store[$key] = $value;
-                return true;
-            }
-
-            #[\Override]
-            public function delete(string $key): bool
-            {
-                unset($this->store[$key]);
-                return true;
-            }
-
-            #[\Override]
-            public function clear(): bool
-            {
-                $this->store = [];
-                return true;
-            }
-
-            #[\Override]
-            public function getMultiple(iterable $keys, mixed $default = null): iterable
-            {
-                $out = [];
-                foreach ($keys as $k) {
-                    $out[$k] = $this->store[$k] ?? $default;
-                }
-                return $out;
-            }
-
-            #[\Override]
-            public function setMultiple(iterable $values, null|int|DateInterval $ttl = null): bool
-            {
-                foreach ($values as $k => $v) {
-                    $this->store[(string) $k] = $v;
-                }
-                return true;
-            }
-
-            #[\Override]
-            public function deleteMultiple(iterable $keys): bool
-            {
-                foreach ($keys as $k) {
-                    unset($this->store[$k]);
-                }
-                return true;
-            }
-
-            #[\Override]
-            public function has(string $key): bool
-            {
-                return array_key_exists($key, $this->store);
-            }
-        };
     }
 }
