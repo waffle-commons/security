@@ -34,10 +34,12 @@ class Level7Rule implements SecurityRuleInterface
             }
 
             foreach ($method->getParameters() as $param) {
-                /** @var null|ReflectionNamedType $paramType */
                 $paramType = $param->getType();
+                // Only a *named* type can be `mixed`. Union (`string|object`) and
+                // intersection types are inherently strict, so they satisfy the rule —
+                // and calling getName() on them would fatal (no such method).
                 if (
-                    null !== $paramType
+                    $paramType instanceof ReflectionNamedType
                     && $paramType->getName() === Constant::TYPE_MIXED
                     && !$param->isDefaultValueAvailable()
                 ) {

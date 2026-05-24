@@ -33,11 +33,12 @@ class Level3Rule implements SecurityRuleInterface
                 continue;
             }
 
-            /** @var null|ReflectionNamedType $returnType */
             $returnType = $method->getReturnType();
 
+            // Only a *named* return type can be `void`. Union/intersection returns
+            // (e.g. `string|array`) are never void and would fatal on getName().
             if (
-                null !== $returnType
+                $returnType instanceof ReflectionNamedType
                 && $returnType->getName() === Constant::TYPE_VOID
                 && $method->getDeclaringClass()->getName() === $class
             ) {
