@@ -94,7 +94,10 @@ final class AnonymousSessionMiddlewareTest extends TestCase
     {
         $middleware = new AnonymousSessionMiddleware();
         $request = $this->buildRequest(cookies: [], scheme: 'http');
-        $request->method('withAttribute')->willReturnSelf();
+        // The session attribute is still minted on plain HTTP — only the cookie's
+        // Secure flag depends on the scheme. Asserting the call (rather than merely
+        // stubbing it) verifies that and keeps the request mock expectation-backed.
+        $request->expects(static::once())->method('withAttribute')->willReturnSelf();
 
         $response = $this->expectResponseWithAddedCookie(static function (string $cookie): bool {
             return !str_contains($cookie, 'Secure');
