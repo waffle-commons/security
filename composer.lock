@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a82847071227e8280ab9129d6a4c318",
+    "content-hash": "fb57d46715fe10b2f5a581cbd9a6fbb7",
     "packages": [
         {
             "name": "psr/cache",
@@ -157,6 +157,58 @@
                 "source": "https://github.com/php-fig/event-dispatcher/tree/1.0.0"
             },
             "time": "2019-01-08T18:20:26+00:00"
+        },
+        {
+            "name": "psr/http-client",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-client.git",
+                "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-client/zipball/bb5906edc1c324c9a05aa0873d40117941e5fa90",
+                "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0 || ^8.0",
+                "psr/http-message": "^1.0 || ^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP clients",
+            "homepage": "https://github.com/php-fig/http-client",
+            "keywords": [
+                "http",
+                "http-client",
+                "psr",
+                "psr-18"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-client"
+            },
+            "time": "2023-09-23T14:17:50+00:00"
         },
         {
             "name": "psr/http-message",
@@ -431,12 +483,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/waffle-commons/contracts.git",
-                "reference": "1d3c2943a1cb2b14c98e768b12d2dbd183728175"
+                "reference": "b7b36cd1159cfbc2628f1858d53e2fa92f3acf6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waffle-commons/contracts/zipball/1d3c2943a1cb2b14c98e768b12d2dbd183728175",
-                "reference": "1d3c2943a1cb2b14c98e768b12d2dbd183728175",
+                "url": "https://api.github.com/repos/waffle-commons/contracts/zipball/b7b36cd1159cfbc2628f1858d53e2fa92f3acf6c",
+                "reference": "b7b36cd1159cfbc2628f1858d53e2fa92f3acf6c",
                 "shasum": ""
             },
             "require": {
@@ -444,6 +496,7 @@
                 "psr/cache": "^3.0",
                 "psr/container": "^2.0",
                 "psr/event-dispatcher": "^1.0",
+                "psr/http-client": "^1.0",
                 "psr/http-message": "^1.1 || ^2.0",
                 "psr/http-server-handler": "^1.0",
                 "psr/http-server-middleware": "^1.0",
@@ -479,7 +532,7 @@
                 "issues": "https://github.com/waffle-commons/contracts/issues",
                 "source": "https://github.com/waffle-commons/contracts/tree/main"
             },
-            "time": "2026-05-16T13:54:29+00:00"
+            "time": "2026-05-25T01:02:31+00:00"
         },
         {
             "name": "waffle-commons/utils",
@@ -487,12 +540,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/waffle-commons/utils.git",
-                "reference": "41b405d72e1f1b7736e109a873149740a7325f7b"
+                "reference": "707da78b4098fca782d54c624039fd8f477a096e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waffle-commons/utils/zipball/41b405d72e1f1b7736e109a873149740a7325f7b",
-                "reference": "41b405d72e1f1b7736e109a873149740a7325f7b",
+                "url": "https://api.github.com/repos/waffle-commons/utils/zipball/707da78b4098fca782d54c624039fd8f477a096e",
+                "reference": "707da78b4098fca782d54c624039fd8f477a096e",
                 "shasum": ""
             },
             "require": {
@@ -528,7 +581,7 @@
                 "issues": "https://github.com/waffle-commons/utils/issues",
                 "source": "https://github.com/waffle-commons/utils/tree/main"
             },
-            "time": "2026-05-16T14:00:10+00:00"
+            "time": "2026-05-25T01:03:09+00:00"
         }
     ],
     "packages-dev": [
