@@ -6,11 +6,13 @@ namespace Waffle\Commons\Security\Rule;
 
 use Waffle\Commons\Contracts\Security\SecurityRuleInterface;
 use Waffle\Commons\Security\Exception\SecurityException;
-use Waffle\Commons\Utils\Trait\ReflectionTrait;
+use Waffle\Commons\Utils\Service\ReflectionInspector;
 
 class Level1Rule implements SecurityRuleInterface
 {
-    use ReflectionTrait;
+    public function __construct(
+        private readonly ReflectionInspector $inspector = new ReflectionInspector(),
+    ) {}
 
     /**
      * Security Level 1: Checks basic object consistency.
@@ -21,7 +23,7 @@ class Level1Rule implements SecurityRuleInterface
     public function check(object $object): void
     {
         $class = get_class($object);
-        if (!$this->isInstance(object: $object, instances: [$class])) {
+        if (!$this->inspector->isInstance(object: $object, instances: [$class])) {
             // @codeCoverageIgnoreStart
             throw new SecurityException(
                 message: "Level 1: Object validation failed. Instance mismatch for {$class}.",

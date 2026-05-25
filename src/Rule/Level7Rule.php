@@ -9,11 +9,13 @@ use ReflectionNamedType;
 use Waffle\Commons\Contracts\Constant\Constant;
 use Waffle\Commons\Contracts\Security\SecurityRuleInterface;
 use Waffle\Commons\Security\Exception\SecurityException;
-use Waffle\Commons\Utils\Trait\ReflectionTrait;
+use Waffle\Commons\Utils\Service\ReflectionInspector;
 
 class Level7Rule implements SecurityRuleInterface
 {
-    use ReflectionTrait;
+    public function __construct(
+        private readonly ReflectionInspector $inspector = new ReflectionInspector(),
+    ) {}
 
     /**
      * Security Level 7: Method argument safety.
@@ -23,7 +25,7 @@ class Level7Rule implements SecurityRuleInterface
     #[\Override]
     public function check(object $object): void
     {
-        $methods = $this->getMethods(object: $object, filter: ReflectionMethod::IS_PUBLIC);
+        $methods = $this->inspector->getMethods(object: $object, filter: ReflectionMethod::IS_PUBLIC);
         $class = get_class($object);
 
         foreach ($methods as $method) {
@@ -32,10 +34,12 @@ class Level7Rule implements SecurityRuleInterface
             }
 
             foreach ($method->getParameters() as $param) {
-                /** @var null|ReflectionNamedType $paramType */
                 $paramType = $param->getType();
+                // Only a *named* type can be `mixed`. Union (`string|object`) and
+                // intersection types are inherently strict, so they satisfy the rule —
+                // and calling getName() on them would fatal (no such method).
                 if (
-                    null !== $paramType
+                    $paramType instanceof ReflectionNamedType
                     && $paramType->getName() === Constant::TYPE_MIXED
                     && !$param->isDefaultValueAvailable()
                 ) {

@@ -20,6 +20,9 @@ use WaffleTests\Commons\Security\Helper\Controller\CsrfController;
 #[CoversClass(CsrfMiddleware::class)]
 final class CsrfMiddlewareTest extends TestCase
 {
+    /** Stable SID stand-in for stubbed requests (matches the AnonymousSession contract). */
+    private const string TEST_SID = 'sid-abcdef0123456789abcdef0123456789abcdef0123';
+
     public function testGetRequestBypassesCsrfChecksEntirely(): void
     {
         $manager = $this->createMock(CsrfTokenManagerInterface::class);
@@ -67,10 +70,34 @@ final class CsrfMiddlewareTest extends TestCase
         $middleware->process($request, $this->neverCalledHandler());
     }
 
+    public function testMissingSessionIdAttributeFailsClosed(): void
+    {
+        // SEC-01 option C: without the AnonymousSessionMiddleware-published SID,
+        // CsrfMiddleware MUST refuse validation. Treated as invalid token.
+        $manager = $this->createMock(CsrfTokenManagerInterface::class);
+        $manager->expects(static::never())->method('validate');
+        $middleware = new CsrfMiddleware($manager);
+
+        $request = $this->buildRequest(
+            method: 'POST',
+            controller: CsrfController::class,
+            action: 'protected',
+            headers: [CsrfConstant::HEADER_NAME => 'irrelevant'],
+            sessionId: null,
+        );
+
+        $this->expectException(InvalidCsrfTokenException::class);
+        $middleware->process($request, $this->neverCalledHandler());
+    }
+
     public function testInvalidTokenThrowsInvalidException(): void
     {
         $manager = $this->createMock(CsrfTokenManagerInterface::class);
-        $manager->expects(static::once())->method('validate')->with('form:test', 'forged')->willReturn(false);
+        $manager
+            ->expects(static::once())
+            ->method('validate')
+            ->with('form:test', self::TEST_SID, 'forged')
+            ->willReturn(false);
         $middleware = new CsrfMiddleware($manager);
 
         $request = $this->buildRequest(
@@ -87,7 +114,11 @@ final class CsrfMiddlewareTest extends TestCase
     public function testValidHeaderTokenIsAccepted(): void
     {
         $manager = $this->createMock(CsrfTokenManagerInterface::class);
-        $manager->expects(static::once())->method('validate')->with('form:test', 'ok')->willReturn(true);
+        $manager
+            ->expects(static::once())
+            ->method('validate')
+            ->with('form:test', self::TEST_SID, 'ok')
+            ->willReturn(true);
         $middleware = new CsrfMiddleware($manager);
 
         $request = $this->buildRequest(
@@ -135,7 +166,11 @@ final class CsrfMiddlewareTest extends TestCase
     public function testHeaderTakesPrecedenceOverCookieAndForm(): void
     {
         $manager = $this->createMock(CsrfTokenManagerInterface::class);
-        $manager->expects(static::once())->method('validate')->with('form:test', 'from-header')->willReturn(true);
+        $manager
+            ->expects(static::once())
+            ->method('validate')
+            ->with('form:test', self::TEST_SID, 'from-header')
+            ->willReturn(true);
         $middleware = new CsrfMiddleware($manager);
 
         $request = $this->buildRequest(
@@ -187,6 +222,7 @@ final class CsrfMiddlewareTest extends TestCase
                 return match ($name) {
                     Constant::ATTR_CLASSNAME => [CsrfController::class, 'protected'],
                     Constant::ATTR_METHOD => null,
+                    CsrfConstant::SESSION_REQUEST_ATTRIBUTE => self::TEST_SID,
                     default => null,
                 };
             });
@@ -210,15 +246,17 @@ final class CsrfMiddlewareTest extends TestCase
         array $headers = [],
         ?array $parsedBody = null,
         array $cookies = [],
+        ?string $sessionId = self::TEST_SID,
     ): ServerRequestInterface {
         $request = $this->createStub(ServerRequestInterface::class);
         $request->method('getMethod')->willReturn($method);
         $request
             ->method('getAttribute')
-            ->willReturnCallback(static function ($name) use ($controller, $action) {
+            ->willReturnCallback(static function ($name) use ($controller, $action, $sessionId) {
                 return match ($name) {
                     Constant::ATTR_CLASSNAME => $controller,
                     Constant::ATTR_METHOD => $action,
+                    CsrfConstant::SESSION_REQUEST_ATTRIBUTE => $sessionId,
                     default => null,
                 };
             });

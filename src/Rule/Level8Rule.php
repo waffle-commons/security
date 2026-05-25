@@ -7,12 +7,9 @@ namespace Waffle\Commons\Security\Rule;
 use ReflectionObject;
 use Waffle\Commons\Contracts\Security\SecurityRuleInterface;
 use Waffle\Commons\Security\Exception\SecurityException;
-use Waffle\Commons\Utils\Trait\ReflectionTrait;
 
 class Level8Rule implements SecurityRuleInterface
 {
-    use ReflectionTrait;
-
     /**
      * Security Level 8: Code finalization.
      * [Rule 8]: Ensures important classes (e.g., Controllers) are declared final.

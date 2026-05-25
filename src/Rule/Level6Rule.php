@@ -6,11 +6,13 @@ namespace Waffle\Commons\Security\Rule;
 
 use Waffle\Commons\Contracts\Security\SecurityRuleInterface;
 use Waffle\Commons\Security\Exception\SecurityException;
-use Waffle\Commons\Utils\Trait\ReflectionTrait;
+use Waffle\Commons\Utils\Service\ReflectionInspector;
 
 class Level6Rule implements SecurityRuleInterface
 {
-    use ReflectionTrait;
+    public function __construct(
+        private readonly ReflectionInspector $inspector = new ReflectionInspector(),
+    ) {}
 
     /**
      * Security Level 6: Reinforces property initialization.
@@ -20,7 +22,7 @@ class Level6Rule implements SecurityRuleInterface
     #[\Override]
     public function check(object $object): void
     {
-        $properties = $this->getProperties(object: $object);
+        $properties = $this->inspector->getProperties(object: $object);
         $class = get_class($object);
 
         foreach ($properties as $property) {

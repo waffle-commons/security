@@ -9,11 +9,13 @@ use ReflectionNamedType;
 use Waffle\Commons\Contracts\Constant\Constant;
 use Waffle\Commons\Contracts\Security\SecurityRuleInterface;
 use Waffle\Commons\Security\Exception\SecurityException;
-use Waffle\Commons\Utils\Trait\ReflectionTrait;
+use Waffle\Commons\Utils\Service\ReflectionInspector;
 
 class Level3Rule implements SecurityRuleInterface
 {
-    use ReflectionTrait;
+    public function __construct(
+        private readonly ReflectionInspector $inspector = new ReflectionInspector(),
+    ) {}
 
     /**
      * Security Level 3: Basic method validation.
@@ -23,7 +25,7 @@ class Level3Rule implements SecurityRuleInterface
     #[\Override]
     public function check(object $object): void
     {
-        $methods = $this->getMethods(object: $object, filter: ReflectionMethod::IS_PUBLIC);
+        $methods = $this->inspector->getMethods(object: $object, filter: ReflectionMethod::IS_PUBLIC);
         $class = get_class($object);
 
         foreach ($methods as $method) {
@@ -31,11 +33,12 @@ class Level3Rule implements SecurityRuleInterface
                 continue;
             }
 
-            /** @var null|ReflectionNamedType $returnType */
             $returnType = $method->getReturnType();
 
+            // Only a *named* return type can be `void`. Union/intersection returns
+            // (e.g. `string|array`) are never void and would fatal on getName().
             if (
-                null !== $returnType
+                $returnType instanceof ReflectionNamedType
                 && $returnType->getName() === Constant::TYPE_VOID
                 && $method->getDeclaringClass()->getName() === $class
             ) {

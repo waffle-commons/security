@@ -7,11 +7,13 @@ namespace Waffle\Commons\Security\Rule;
 use ReflectionMethod;
 use Waffle\Commons\Contracts\Security\SecurityRuleInterface;
 use Waffle\Commons\Security\Exception\SecurityException;
-use Waffle\Commons\Utils\Trait\ReflectionTrait;
+use Waffle\Commons\Utils\Service\ReflectionInspector;
 
 class Level4Rule implements SecurityRuleInterface
 {
-    use ReflectionTrait;
+    public function __construct(
+        private readonly ReflectionInspector $inspector = new ReflectionInspector(),
+    ) {}
 
     /**
      * Security Level 4: Strengthens public method typing.
@@ -21,7 +23,7 @@ class Level4Rule implements SecurityRuleInterface
     #[\Override]
     public function check(object $object): void
     {
-        $methods = $this->getMethods(object: $object, filter: ReflectionMethod::IS_PUBLIC);
+        $methods = $this->inspector->getMethods(object: $object, filter: ReflectionMethod::IS_PUBLIC);
         $class = get_class($object);
 
         foreach ($methods as $method) {
