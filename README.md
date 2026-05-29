@@ -9,15 +9,19 @@
 Waffle Security Component
 =========================
 
-> **Release:** `v0.1.0-beta1`
+> **Release:** `v0.1.0-beta2` &nbsp;|&nbsp; [`CHANGELOG.md`](./CHANGELOG.md)
 
-Hierarchical Attribute-Based Access Control (ABAC) for the Waffle Framework with a **fail-closed default** (Beta-1 / SEC-02), a fully **stateless HMAC CSRF subsystem** bound to a per-browser anonymous SID (Beta-1 / SEC-01 option C), and a container decorator (`SecureContainer`) that hardens service retrieval. Security is enforced by PSR-15 middleware sitting between routing and dispatch.
+Hierarchical Attribute-Based Access Control (ABAC) for the Waffle Framework with a **fail-closed default** (SEC-02), a fully **stateless HMAC CSRF subsystem** bound to a per-browser anonymous SID (SEC-01 option C), and a container decorator (`SecureContainer`) that hardens service retrieval. Security is enforced by PSR-15 middleware sitting between routing and dispatch.
 
-## 🆕 Beta-1 highlights
+## Beta-2 status
 
-- **Fail-closed ABAC** — `SecureContainer::analyze()` rejects any action without a `#[Voter]` unless explicitly tagged `#[PublicAccess]`. Missing policy is now denial, not silent allow.
+No behavioural changes since Beta-1 — lockstep version bump only. The security architecture remains as described below.
+
+## 🆕 Beta-1 foundations (still current)
+
+- **Fail-closed ABAC** — `SecureContainer::analyze()` rejects any action without a `#[Voter]` unless explicitly tagged `#[PublicAccess]`. Missing policy is denial, not silent allow.
 - **Stateless HMAC CSRF** — `CsrfTokenManager` issues self-validating signed tokens; **no cache, no Redis, no PHP sessions**. The HMAC binds to `(id, sessionId)` so a token cannot be replayed across forms or across browsers.
-- **`AnonymousSessionMiddleware`** — issues the `WAFFLE_SID` cookie that anchors CSRF binding. Stateless across requests (FrankenPHP-safe).
+- **`AnonymousSessionMiddleware`** — issues the `WAFFLE_SID` cookie (32 random bytes, base64url, 30-day Max-Age, HttpOnly, SameSite=Lax, Secure on HTTPS) that anchors CSRF binding. Stateless across requests (FrankenPHP-safe).
 
 ## 📦 Installation
 
@@ -155,6 +159,22 @@ $stack
 - `#[Rule]` / `#[Voter]` / `#[RequiresCsrfToken]` / `#[PublicAccess]` attributes from the contracts package.
 - `final readonly class CsrfToken` value object; `final readonly class CsrfTokenManager` (no instance state across requests).
 - `#[\SensitiveParameter]` on the CSRF signing secret to suppress its value from stack traces and error reports.
+
+## 🧭 Architectural boundary (`mago guard`)
+
+An active dependency **perimeter** is enforced on every CI run by `vendor/bin/mago guard` (bundled into `composer mago`; zero baselines). The rules live in [`mago.toml`](./mago.toml) under `[guard.perimeter]` — a forbidden `use` statement fails the build, not a reviewer.
+
+Production code under `Waffle\Commons\Security` may depend **only** on:
+
+- `Waffle\Commons\Security\**` — itself
+- `Waffle\Commons\Contracts\**` — the shared contracts package (`#[PublicAccess]`, `#[Voter]`, `RequiresCsrfToken`, the CSRF constants, etc.)
+- `Waffle\Commons\Utils\**` — the `ClassParser` reflection helper used by `SecureContainer`
+- `Psr\**` — PSR interfaces (PSR-7 / PSR-15)
+- `@global` + `Psl\**` — PHP core and the PHP Standard Library
+
+Test code under `WaffleTests\Commons\Security` is unrestricted (`@all`). Structural rules are guarded too: interfaces must be named `*Interface`, `Exception\**` classes must end in `*Exception`, and any `Enum\**` namespace may hold only `enum` declarations.
+
+Contract-first, component-agnostic by construction: components compose through `waffle-commons/contracts` (plus the explicitly-permitted `utils`), never ad-hoc through one another.
 
 ## 🧪 Testing
 
