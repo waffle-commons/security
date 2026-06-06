@@ -209,6 +209,15 @@ final readonly class SecureContainer implements ContainerInterface
      */
     public function reset(): void
     {
+        // Decorator discipline: forward the reset to the wrapped container
+        // FIRST so its registered resettable services (auth SecurityContext,
+        // connection pools, …) are wiped every worker loop. Without this
+        // forwarding the kernel's reset chain would stop at the decorator and
+        // request-scoped state would leak across requests (RFC-021 §4.1).
+        if ($this->inner instanceof ResettableInterface) {
+            $this->inner->reset();
+        }
+
         foreach ($this->instances as $_ => $service) {
             if (!$service instanceof ResettableInterface) {
                 continue;
