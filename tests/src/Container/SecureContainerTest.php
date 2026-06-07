@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
+use Waffle\Commons\Contracts\Service\ResettableInterface;
 use Waffle\Commons\Security\Container\SecureContainer;
 use Waffle\Commons\Security\Exception\ContainerException;
 use Waffle\Commons\Security\Exception\NotFoundException;
@@ -123,5 +124,53 @@ class SecureContainerTest extends TestCase
         $this->expectExceptionMessage("The inner container does not support mutable 'set' operations.");
 
         $container->set('service_id', new \stdClass());
+    }
+
+    public function testResetForwardsToTheDecoratedResettableContainer(): void
+    {
+        // Decorator discipline (RFC-021 §4.1 regression): the kernel's reset
+        // chain must reach the WRAPPED container so its request-scoped
+        // services (auth SecurityContext, connection pools, …) are wiped
+        // every worker loop.
+        $inner = new class implements PsrContainerInterface, ResettableInterface {
+            public bool $resetCalled = false;
+
+            #[\Override]
+            public function get(string $id): mixed
+            {
+                return null;
+            }
+
+            #[\Override]
+            public function has(string $id): bool
+            {
+                return false;
+            }
+
+            #[\Override]
+            public function reset(): void
+            {
+                $this->resetCalled = true;
+            }
+        };
+
+        $security = $this->createMock(SecurityInterface::class);
+        $container = new SecureContainer($inner, $security);
+
+        $container->reset();
+
+        static::assertTrue($inner->resetCalled, 'reset() must forward through the decorator.');
+    }
+
+    public function testResetToleratesNonResettableInnerContainers(): void
+    {
+        $inner = $this->createMock(PsrContainerInterface::class); // PSR-11 only.
+        $security = $this->createMock(SecurityInterface::class);
+
+        $container = new SecureContainer($inner, $security);
+        $container->reset();
+
+        // No exception: a plain PSR-11 inner container is simply skipped.
+        $this->addToAssertionCount(1);
     }
 }
