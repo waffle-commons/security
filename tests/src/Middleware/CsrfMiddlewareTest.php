@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Waffle\Commons\Contracts\Auth\Constant as AuthConstant;
+use Waffle\Commons\Contracts\Auth\UserIdentityInterface;
 use Waffle\Commons\Contracts\Constant\Constant;
 use Waffle\Commons\Contracts\Security\Csrf\Constant as CsrfConstant;
 use Waffle\Commons\Contracts\Security\Csrf\CsrfTokenManagerInterface;
@@ -96,7 +98,7 @@ final class CsrfMiddlewareTest extends TestCase
         $manager
             ->expects(static::once())
             ->method('validate')
-            ->with('form:test', self::TEST_SID, 'forged')
+            ->with('form:test', 'anon:' . self::TEST_SID, 'forged')
             ->willReturn(false);
         $middleware = new CsrfMiddleware($manager);
 
@@ -117,7 +119,7 @@ final class CsrfMiddlewareTest extends TestCase
         $manager
             ->expects(static::once())
             ->method('validate')
-            ->with('form:test', self::TEST_SID, 'ok')
+            ->with('form:test', 'anon:' . self::TEST_SID, 'ok')
             ->willReturn(true);
         $middleware = new CsrfMiddleware($manager);
 
@@ -169,7 +171,7 @@ final class CsrfMiddlewareTest extends TestCase
         $manager
             ->expects(static::once())
             ->method('validate')
-            ->with('form:test', self::TEST_SID, 'from-header')
+            ->with('form:test', 'anon:' . self::TEST_SID, 'from-header')
             ->willReturn(true);
         $middleware = new CsrfMiddleware($manager);
 
@@ -234,6 +236,72 @@ final class CsrfMiddlewareTest extends TestCase
         $middleware->process($request, $this->expectingHandler());
     }
 
+    public function testAuthenticatedRequestBindsValidationToSubject(): void
+    {
+        // SEC-01: once authenticated, the token is bound to `auth:<subject>`,
+        // not the anonymous SID — so an anon-minted token cannot be tossed in.
+        $manager = $this->createMock(CsrfTokenManagerInterface::class);
+        $manager
+            ->expects(static::once())
+            ->method('validate')
+            ->with('form:test', 'auth:user-99', 'ok')
+            ->willReturn(true);
+        $middleware = new CsrfMiddleware($manager);
+
+        $request = $this->buildRequest(
+            method: 'POST',
+            controller: CsrfController::class,
+            action: 'protected',
+            headers: [CsrfConstant::HEADER_NAME => 'ok'],
+            identity: $this->identity('user-99'),
+        );
+
+        $middleware->process($request, $this->expectingHandler());
+    }
+
+    public function testAuthenticatedBindingTakesPrecedenceOverAnonymousSid(): void
+    {
+        // Both an identity AND a SID are present — the subject wins.
+        $manager = $this->createMock(CsrfTokenManagerInterface::class);
+        $manager->expects(static::once())->method('validate')->with('form:test', 'auth:user-1', 'ok')->willReturn(true);
+        $middleware = new CsrfMiddleware($manager);
+
+        $request = $this->buildRequest(
+            method: 'POST',
+            controller: CsrfController::class,
+            action: 'protected',
+            headers: [CsrfConstant::HEADER_NAME => 'ok'],
+            identity: $this->identity('user-1'),
+        );
+
+        $middleware->process($request, $this->expectingHandler());
+    }
+
+    private function identity(string $subject): UserIdentityInterface
+    {
+        return new class($subject) implements UserIdentityInterface {
+            public function __construct(
+                private string $sub,
+            ) {}
+
+            public string $subject {
+                get => $this->sub;
+            }
+
+            public ?string $email {
+                get => null;
+            }
+
+            public array $roles {
+                get => [];
+            }
+
+            public array $claims {
+                get => [];
+            }
+        };
+    }
+
     /**
      * @param array<string, string>      $headers
      * @param array<string, mixed>|null  $parsedBody
@@ -247,16 +315,18 @@ final class CsrfMiddlewareTest extends TestCase
         ?array $parsedBody = null,
         array $cookies = [],
         ?string $sessionId = self::TEST_SID,
+        ?UserIdentityInterface $identity = null,
     ): ServerRequestInterface {
         $request = $this->createStub(ServerRequestInterface::class);
         $request->method('getMethod')->willReturn($method);
         $request
             ->method('getAttribute')
-            ->willReturnCallback(static function ($name) use ($controller, $action, $sessionId) {
+            ->willReturnCallback(static function ($name) use ($controller, $action, $sessionId, $identity) {
                 return match ($name) {
                     Constant::ATTR_CLASSNAME => $controller,
                     Constant::ATTR_METHOD => $action,
                     CsrfConstant::SESSION_REQUEST_ATTRIBUTE => $sessionId,
+                    AuthConstant::REQUEST_ATTRIBUTE => $identity,
                     default => null,
                 };
             });
