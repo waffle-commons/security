@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Waffle\Commons\Contracts\Auth\SecurityContextInterface;
 use Waffle\Commons\Contracts\Security\Csrf\Constant as CsrfConstant;
 use Waffle\Commons\Security\Middleware\AnonymousSessionMiddleware;
 
@@ -104,6 +105,69 @@ final class AnonymousSessionMiddlewareTest extends TestCase
         });
 
         $handler = $this->handlerReturning($response['original']);
+        $middleware->process($request, $handler);
+    }
+
+    public function testRotatesSessionIdWhenAuthenticatedWithPreexistingCookie(): void
+    {
+        // SEC-01 session fixation: a pre-existing SID + an authenticated request
+        // ⇒ the cookie is re-issued with a FRESH id (different from the one sent).
+        $existing = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
+        $context = $this->createStub(SecurityContextInterface::class);
+        $context->method('isAuthenticated')->willReturn(true);
+
+        $middleware = new AnonymousSessionMiddleware($context);
+        $request = $this->buildRequest(cookies: [CsrfConstant::SESSION_COOKIE_NAME => $existing], scheme: 'https');
+        $request
+            ->expects(static::once())
+            ->method('withAttribute')
+            ->with(CsrfConstant::SESSION_REQUEST_ATTRIBUTE, $existing)
+            ->willReturnSelf();
+
+        $response = $this->expectResponseWithAddedCookie(static function (string $cookie) use ($existing): bool {
+            return (
+                str_starts_with($cookie, CsrfConstant::SESSION_COOKIE_NAME . '=')
+                && !str_contains($cookie, $existing)
+                && preg_match('/WAFFLE_SID=[A-Za-z0-9_\-]{43}/', $cookie) === 1
+            );
+        });
+
+        $handler = $this->handlerReturning($response['original']);
+        static::assertSame($response['decorated'], $middleware->process($request, $handler));
+    }
+
+    public function testDoesNotRotateWhenContextIsNotAuthenticated(): void
+    {
+        $existing = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
+        $context = $this->createStub(SecurityContextInterface::class);
+        $context->method('isAuthenticated')->willReturn(false);
+
+        $middleware = new AnonymousSessionMiddleware($context);
+        $request = $this->buildRequest(cookies: [CsrfConstant::SESSION_COOKIE_NAME => $existing], scheme: 'https');
+        $request
+            ->expects(static::once())
+            ->method('withAttribute')
+            ->with(CsrfConstant::SESSION_REQUEST_ATTRIBUTE, $existing)
+            ->willReturnSelf();
+
+        $response = $this->createMock(ResponseInterface::class);
+        $response->expects(static::never())->method('withAddedHeader');
+
+        $handler = $this->handlerReturning($response);
+        static::assertSame($response, $middleware->process($request, $handler));
+    }
+
+    public function testForceSecureCookieEmitsSecureFlagOnPlainHttp(): void
+    {
+        $middleware = new AnonymousSessionMiddleware(securityContext: null, forceSecureCookie: true);
+        $request = $this->buildRequest(cookies: [], scheme: 'http');
+        $request->expects(static::once())->method('withAttribute')->willReturnSelf();
+
+        $response = $this->expectResponseWithAddedCookie(
+            static fn(string $cookie): bool => str_contains($cookie, 'Secure'),
+        );
+        $handler = $this->handlerReturning($response['original']);
+
         $middleware->process($request, $handler);
     }
 

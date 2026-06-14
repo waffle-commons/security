@@ -14,6 +14,7 @@ use Waffle\Commons\Contracts\Constant\Constant;
 use Waffle\Commons\Contracts\Security\Csrf\Attribute\RequiresCsrfToken;
 use Waffle\Commons\Contracts\Security\Csrf\Constant as CsrfConstant;
 use Waffle\Commons\Contracts\Security\Csrf\CsrfTokenManagerInterface;
+use Waffle\Commons\Security\Csrf\CsrfBindingResolver;
 use Waffle\Commons\Security\Csrf\Exception\InvalidCsrfTokenException;
 use Waffle\Commons\Security\Csrf\Exception\MissingCsrfTokenException;
 
@@ -66,15 +67,17 @@ final class CsrfMiddleware implements MiddlewareInterface
             throw new MissingCsrfTokenException(tokenId: $tokenId);
         }
 
-        // SEC-01 option C: bind validation to the per-browser anonymous SID
-        // published by AnonymousSessionMiddleware. A missing attribute means
-        // the pipeline is misconfigured — treat as invalid token to fail-closed.
-        $sessionId = $request->getAttribute(CsrfConstant::SESSION_REQUEST_ATTRIBUTE);
-        if (!is_string($sessionId) || $sessionId === '') {
+        // SEC-01: bind validation to the authenticated subject when present,
+        // else the per-browser anonymous SID (see CsrfBindingResolver). A token
+        // minted while anonymous therefore cannot validate once the session
+        // authenticates (session tossing). A null binding means the pipeline is
+        // misconfigured (no SID published) — treat as invalid to fail-closed.
+        $binding = CsrfBindingResolver::resolve($request);
+        if ($binding === null) {
             throw new InvalidCsrfTokenException(tokenId: $tokenId);
         }
 
-        if (!$this->tokenManager->validate($tokenId, $sessionId, $candidate)) {
+        if (!$this->tokenManager->validate($tokenId, $binding, $candidate)) {
             throw new InvalidCsrfTokenException(tokenId: $tokenId);
         }
 
