@@ -48,8 +48,9 @@ class SecurityMiddleware implements MiddlewareInterface
 
         // 3. Security Analysis (ABAC)
         try {
-            // The SecureContainer will read #[Rule] attributes on the class and method.
-            $this->secureContainer->analyze($controller, $method);
+            // The SecureContainer reads #[Voter] attributes on the class and method
+            // and runs each voter with the authenticated context + the request.
+            $this->secureContainer->analyze($controller, $method, $request);
         } catch (SecurityException $e) {
             // 4. Defense: Trace the denied access attempt
             $this->logDenial($request, $e, $controller, $method);

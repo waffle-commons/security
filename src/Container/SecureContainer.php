@@ -7,10 +7,12 @@ namespace Waffle\Commons\Security\Container;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use Throwable;
+use Waffle\Commons\Contracts\Auth\SecurityContextInterface;
 use Waffle\Commons\Contracts\Container\ContainerInterface;
 use Waffle\Commons\Contracts\Security\Attribute\PublicAccess;
 use Waffle\Commons\Contracts\Security\Attribute\Voter;
@@ -26,6 +28,15 @@ use Waffle\Commons\Security\Exception\SecurityException;
  * The SecureContainer acts as a secure decorator around ANY PSR-11 Container.
  * It enforces security rules on retrieved instances.
  *
+ * **Two distinct, documented layers (ARCH-01).**
+ * 1. Object integrity — `get()` runs the configured Level1…Level10 ladder
+ *    (`SecurityInterface::analyze()`, strictness driven by `waffle.security.level`)
+ *    over every service it resolves: a structural/consistency check, NOT access
+ *    control.
+ * 2. Route authorization — `analyze(controller, method)` runs the `#[Voter]`
+ *    consensus (context-aware, AUTHZ-01) for the dispatched action. This is the
+ *    single access-control entry point; there is no `#[Rule]` attribute path.
+ *
  * **Beta-1 / SEC-02 — Fail-closed authorization.**
  * `analyze()` rejects any controller action whose target carries no `#[Voter]`
  * rules unless that target (class or method) is explicitly opted-out with
@@ -37,10 +48,12 @@ final readonly class SecureContainer implements ContainerInterface
     /**
      * @param PsrContainerInterface $inner The raw PSR-11 container implementation.
      * @param SecurityInterface $security The security layer.
+     * @param SecurityContextInterface $securityContext Request-scoped authenticated identity, threaded into voters.
      */
     public function __construct(
         private PsrContainerInterface $inner,
         private SecurityInterface $security,
+        private SecurityContextInterface $securityContext,
         private array $instances = [],
     ) {}
 
@@ -103,9 +116,10 @@ final readonly class SecureContainer implements ContainerInterface
      *
      * @param string $controller The FQCN of the controller.
      * @param string $method The method name to audit.
+     * @param ServerRequestInterface|null $request Current request, threaded to voters as the decision subject.
      * @throws SecurityException If access is denied or configuration is invalid.
      */
-    public function analyze(string $controller, string $method): void
+    public function analyze(string $controller, string $method, ?ServerRequestInterface $request = null): void
     {
         try {
             $classReflection = new ReflectionClass($controller);
@@ -136,9 +150,11 @@ final readonly class SecureContainer implements ContainerInterface
             );
         }
 
-        // 3. Decision Phase: Every rule must pass (Consensus pattern)
+        // 3. Decision Phase: every voter must pass (Consensus pattern). The
+        //    request is threaded through as the decision subject so voters can
+        //    express ownership / IDOR rules against the route and identity.
         foreach ($voters as $voterAttribute) {
-            $this->vote(voterName: $voterAttribute->name);
+            $this->vote(voterName: $voterAttribute->name, subject: $request);
         }
     }
 
@@ -170,9 +186,17 @@ final readonly class SecureContainer implements ContainerInterface
     }
 
     /**
-     * Executes the specific voter/rule logic.
+     * Resolves and runs a single voter (Consensus pattern).
+     *
+     * AUTHZ-01: the voter is resolved THROUGH the inner PSR-11 container so it is
+     * autowired with its declared collaborators, instead of a context-free
+     * `new $voterName()`. The authenticated identity reaches the voter via
+     * $this->securityContext; $subject carries the decision target (the current
+     * request, until a richer resource resolver lands).
+     *
+     * @param mixed $subject The resource under decision (or the PSR-7 request).
      */
-    private function vote(string $voterName): void
+    private function vote(string $voterName, mixed $subject = null): void
     {
         // In Waffle, the 'name' in #[Voter] is expected to be the class name
         // of a concrete Voter implementation.
@@ -183,9 +207,21 @@ final readonly class SecureContainer implements ContainerInterface
             );
         }
 
-        // We instantiate the rule/voter.
-        // Note: In Alpha 6, we should fetch this from the Container for Auto-wiring.
-        $voterInstance = new $voterName();
+        try {
+            // The inner Waffle container autowires any instantiable class-string
+            // on get(), so ownership / IDOR voters receive their dependencies.
+            /** @var object $voterInstance */
+            $voterInstance = $this->inner->get($voterName);
+        } catch (ContainerExceptionInterface $e) {
+            throw new SecurityException(
+                message: sprintf(
+                    'Security configuration error: Voter "%s" could not be resolved (%s).',
+                    $voterName,
+                    $e->getMessage(),
+                ),
+                code: 500,
+            );
+        }
 
         if (!$voterInstance instanceof VoterInterface) {
             throw new SecurityException(
@@ -194,8 +230,8 @@ final readonly class SecureContainer implements ContainerInterface
             );
         }
 
-        // The decision is made here.
-        if (!$voterInstance->decide()) {
+        // The decision is made here, with the authenticated context + subject.
+        if (!$voterInstance->decide($this->securityContext, $subject)) {
             throw new SecurityException(
                 message: sprintf('Security Policy Violation: Access refused by %s.', $voterName),
                 code: 403,

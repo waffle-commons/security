@@ -7,6 +7,7 @@ namespace WaffleTests\Commons\Security\Container;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
+use Waffle\Commons\Contracts\Auth\SecurityContextInterface;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
 use Waffle\Commons\Contracts\Service\ResettableInterface;
 use Waffle\Commons\Security\Container\SecureContainer;
@@ -26,7 +27,7 @@ class SecureContainerTest extends TestCase
 
         $security->expects($this->once())->method('analyze')->with($service);
 
-        $container = new SecureContainer($inner, $security);
+        $container = new SecureContainer($inner, $security, $this->createStub(SecurityContextInterface::class));
 
         static::assertSame($service, $container->get('service_id'));
     }
@@ -40,7 +41,7 @@ class SecureContainerTest extends TestCase
             ->method('get')
             ->willThrowException(new class extends \Exception implements \Psr\Container\NotFoundExceptionInterface {});
 
-        $container = new SecureContainer($inner, $security);
+        $container = new SecureContainer($inner, $security, $this->createStub(SecurityContextInterface::class));
 
         $this->expectException(NotFoundException::class);
         $container->get('missing_service');
@@ -55,7 +56,7 @@ class SecureContainerTest extends TestCase
             ->method('get')
             ->willThrowException(new class extends \Exception implements \Psr\Container\ContainerExceptionInterface {});
 
-        $container = new SecureContainer($inner, $security);
+        $container = new SecureContainer($inner, $security, $this->createStub(SecurityContextInterface::class));
 
         $this->expectException(ContainerException::class);
         $container->get('error_service');
@@ -68,7 +69,7 @@ class SecureContainerTest extends TestCase
 
         $inner->expects($this->once())->method('has')->with('service_id')->willReturn(true);
 
-        $container = new SecureContainer($inner, $security);
+        $container = new SecureContainer($inner, $security, $this->createStub(SecurityContextInterface::class));
 
         static::assertTrue($container->has('service_id'));
     }
@@ -106,7 +107,7 @@ class SecureContainerTest extends TestCase
         };
 
         $security = $this->createMock(SecurityInterface::class);
-        $container = new SecureContainer($inner, $security);
+        $container = new SecureContainer($inner, $security, $this->createStub(SecurityContextInterface::class));
 
         $container->set('service_id', $service);
 
@@ -118,7 +119,7 @@ class SecureContainerTest extends TestCase
         $inner = $this->createMock(PsrContainerInterface::class); // No set method
         $security = $this->createMock(SecurityInterface::class);
 
-        $container = new SecureContainer($inner, $security);
+        $container = new SecureContainer($inner, $security, $this->createStub(SecurityContextInterface::class));
 
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage("The inner container does not support mutable 'set' operations.");
@@ -155,7 +156,7 @@ class SecureContainerTest extends TestCase
         };
 
         $security = $this->createMock(SecurityInterface::class);
-        $container = new SecureContainer($inner, $security);
+        $container = new SecureContainer($inner, $security, $this->createStub(SecurityContextInterface::class));
 
         $container->reset();
 
@@ -167,7 +168,7 @@ class SecureContainerTest extends TestCase
         $inner = $this->createMock(PsrContainerInterface::class); // PSR-11 only.
         $security = $this->createMock(SecurityInterface::class);
 
-        $container = new SecureContainer($inner, $security);
+        $container = new SecureContainer($inner, $security, $this->createStub(SecurityContextInterface::class));
         $container->reset();
 
         // No exception: a plain PSR-11 inner container is simply skipped.
