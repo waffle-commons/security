@@ -20,6 +20,10 @@ use Waffle\Commons\Contracts\Security\Exception\SecurityExceptionInterface;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
 use Waffle\Commons\Contracts\Security\VoterInterface;
 use Waffle\Commons\Contracts\Service\ResettableInterface;
+use Waffle\Commons\Contracts\Telemetry\Enum\SpanKind;
+use Waffle\Commons\Contracts\Telemetry\Enum\SpanStatus;
+use Waffle\Commons\Contracts\Telemetry\NullTracer;
+use Waffle\Commons\Contracts\Telemetry\TracerInterface;
 use Waffle\Commons\Security\Exception\ContainerException;
 use Waffle\Commons\Security\Exception\NotFoundException;
 use Waffle\Commons\Security\Exception\SecurityException;
@@ -55,6 +59,7 @@ final readonly class SecureContainer implements ContainerInterface
         private SecurityInterface $security,
         private SecurityContextInterface $securityContext,
         private array $instances = [],
+        private TracerInterface $tracer = new NullTracer(),
     ) {}
 
     /**
@@ -120,6 +125,29 @@ final readonly class SecureContainer implements ContainerInterface
      * @throws SecurityException If access is denied or configuration is invalid.
      */
     public function analyze(string $controller, string $method, ?ServerRequestInterface $request = null): void
+    {
+        $span = $this->tracer->startSpan('waffle.security.authorize', SpanKind::Internal);
+        $span->setAttribute('code.namespace', $controller);
+        $span->setAttribute('code.function', $method);
+
+        try {
+            $this->authorize($controller, $method, $request);
+        } catch (SecurityException $denied) {
+            $span->recordException($denied);
+            $span->setStatus(SpanStatus::Error);
+
+            throw $denied;
+        } finally {
+            $span->end();
+        }
+    }
+
+    /**
+     * Runs the fail-closed #[Voter] consensus for a controller action.
+     *
+     * @throws SecurityException If access is denied or the target is unreachable.
+     */
+    private function authorize(string $controller, string $method, ?ServerRequestInterface $request): void
     {
         try {
             $classReflection = new ReflectionClass($controller);
