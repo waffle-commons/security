@@ -7,17 +7,18 @@ namespace WaffleTests\Commons\Security\Middleware;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface as PsrContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
+use Waffle\Commons\Contracts\Auth\SecurityContextInterface;
 use Waffle\Commons\Contracts\Constant\Constant;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
 use Waffle\Commons\Security\Container\SecureContainer;
 use Waffle\Commons\Security\Exception\SecurityException;
 use Waffle\Commons\Security\Middleware\SecurityMiddleware;
+use WaffleTests\Commons\Security\Helper\AutowiringContainer;
 use WaffleTests\Commons\Security\Helper\Controller\AllowingController;
 use WaffleTests\Commons\Security\Helper\Controller\DenyingController;
 
@@ -28,8 +29,9 @@ final class SecurityMiddlewareTest extends TestCase
     private function makeContainer(): SecureContainer
     {
         return new SecureContainer(
-            inner: $this->createStub(PsrContainerInterface::class),
+            inner: new AutowiringContainer(),
             security: $this->createStub(SecurityInterface::class),
+            securityContext: $this->createStub(SecurityContextInterface::class),
         );
     }
 

@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
+use Waffle\Commons\Contracts\Auth\SecurityContextInterface;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
 use Waffle\Commons\Security\Container\SecureContainer;
 use Waffle\Commons\Security\Exception\ContainerException;
@@ -30,7 +31,7 @@ class SecureContainerEdgeCaseTest extends TestCase
         };
 
         $security = $this->createMock(SecurityInterface::class);
-        $container = new SecureContainer($inner, $security);
+        $container = new SecureContainer($inner, $security, $this->createStub(SecurityContextInterface::class));
 
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage("The inner container does not support mutable 'set' operations.");

@@ -5,6 +5,19 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Released in lockstep with the Waffle Commons umbrella tag.
 
+## [0.1.0-beta5] — 2026-07-08
+
+**Theme: context-aware ABAC & voter tracing.**
+
+### Added
+- **Context-aware authorization (AUTHZ-01).** `SecureContainer::analyze()` now threads a request-scoped `SecurityContextInterface` (the authenticated identity) plus the current PSR-7 `ServerRequestInterface` into `VoterInterface::decide($context, $subject)`. Voters can finally see *who* is acting and *what* they are acting on, making ownership / IDOR rules expressible (e.g. an `OwnerVoter` that grants only when the authenticated subject matches the resource owner). Deny-by-default (no `#[Voter]` → 403 unless `#[PublicAccess]`) and the fail-closed analyze snapshot are unchanged.
+- Telemetry spans on every voter consensus run: `analyze()` opens a `waffle.security.authorize` internal span (carrying `code.namespace` / `code.function`), records the exception and marks the span `Error` on denial, and always ends it — defaulting to the contracts `NullTracer` so the SDK never enters core (OBS-01).
+
+### Changed
+- **Voters are now resolved THROUGH the container (AUTHZ-01).** A `#[Voter]` class-string is fetched via the inner PSR-11 container (`$inner->get($voterName)`) instead of a context-free `new $voterName()`, so voters are autowired with their declared collaborators; an unresolvable voter fails closed as a 500 configuration error.
+- `SecurityMiddleware` forwards the active request into `analyze()` so the decision subject reaches the voters.
+- Enabled the Mago `cyclomatic-complexity` lint with a threshold of `50`.
+
 ## [0.1.0-beta4] — 2026-06-13
 
 **Theme: core security hardening (RC-readiness).**

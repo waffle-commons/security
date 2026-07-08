@@ -8,9 +8,11 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
+use Waffle\Commons\Contracts\Auth\SecurityContextInterface;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
 use Waffle\Commons\Security\Container\SecureContainer;
 use Waffle\Commons\Security\Exception\SecurityException;
+use WaffleTests\Commons\Security\Helper\AutowiringContainer;
 use WaffleTests\Commons\Security\Helper\Controller\AllowingController;
 use WaffleTests\Commons\Security\Helper\Controller\DenyingController;
 use WaffleTests\Commons\Security\Helper\Controller\MisconfiguredVoterController;
@@ -26,8 +28,9 @@ final class SecureContainerAnalyzeTest extends TestCase
     private function makeContainer(): SecureContainer
     {
         return new SecureContainer(
-            inner: $this->createStub(PsrContainerInterface::class),
+            inner: new AutowiringContainer(),
             security: $this->createStub(SecurityInterface::class),
+            securityContext: $this->createStub(SecurityContextInterface::class),
         );
     }
 
@@ -98,6 +101,29 @@ final class SecureContainerAnalyzeTest extends TestCase
         $this->makeContainer()->analyze(MisconfiguredVoterController::class, 'action');
     }
 
+    public function testVoterResolutionFailureIsWrappedAsSecurityException(): void
+    {
+        // AUTHZ-01: a voter that cannot be resolved through the container must
+        // surface as a 500 SecurityException, never leak the container failure.
+        $inner = $this->createMock(PsrContainerInterface::class);
+        $inner
+            ->method('get')
+            ->willThrowException(new class extends \RuntimeException implements
+                \Psr\Container\ContainerExceptionInterface {});
+
+        $container = new SecureContainer(
+            inner: $inner,
+            security: $this->createStub(SecurityInterface::class),
+            securityContext: $this->createStub(SecurityContextInterface::class),
+        );
+
+        $this->expectException(SecurityException::class);
+        $this->expectExceptionCode(500);
+        $this->expectExceptionMessage('could not be resolved');
+
+        $container->analyze(AllowingController::class, 'action');
+    }
+
     public function testAnalyzeWithUnreachableTargetThrows(): void
     {
         $this->expectException(SecurityException::class);
@@ -125,6 +151,7 @@ final class SecureContainerAnalyzeTest extends TestCase
         $container = new SecureContainer(
             inner: $this->createStub(PsrContainerInterface::class),
             security: $this->createStub(SecurityInterface::class),
+            securityContext: $this->createStub(SecurityContextInterface::class),
             instances: [$resettable, $plain],
         );
 
@@ -150,7 +177,11 @@ final class SecureContainerAnalyzeTest extends TestCase
         $security = $this->createMock(SecurityInterface::class);
         $security->method('analyze')->willThrowException($securityException);
 
-        $container = new SecureContainer(inner: $inner, security: $security);
+        $container = new SecureContainer(
+            inner: $inner,
+            security: $security,
+            securityContext: $this->createStub(SecurityContextInterface::class),
+        );
 
         try {
             $container->get('svc');
@@ -166,7 +197,11 @@ final class SecureContainerAnalyzeTest extends TestCase
         $inner = $this->createMock(PsrContainerInterface::class);
         $inner->method('get')->willThrowException(new \LogicException('unexpected'));
 
-        $container = new SecureContainer(inner: $inner, security: $this->createStub(SecurityInterface::class));
+        $container = new SecureContainer(
+            inner: $inner,
+            security: $this->createStub(SecurityInterface::class),
+            securityContext: $this->createStub(SecurityContextInterface::class),
+        );
 
         $this->expectException(\Waffle\Commons\Security\Exception\ContainerException::class);
         $this->expectExceptionMessage('unexpected');
