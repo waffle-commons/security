@@ -117,21 +117,32 @@ final readonly class SecureContainer implements ContainerInterface
      *
      * Fail-closed policy (Beta-1): if neither the controller class nor the
      * target method carries a `#[Voter]`, access is denied with a 403 unless
-     * the target is explicitly marked `#[PublicAccess]`.
+     * the target method is explicitly marked `#[PublicAccess]`.
      *
      * @param string $controller The FQCN of the controller.
      * @param string $method The method name to audit.
-     * @param ServerRequestInterface|null $request Current request, threaded to voters as the decision subject.
+     * @param ServerRequestInterface|null $request Current request, threaded to voters as the decision subject
+     *        whenever no richer $resolvedSubject is supplied.
+     * @param mixed $resolvedSubject SEC-05: the real domain entity/model under decision (e.g. the `Order`
+     *        a route's `{id}` identifies), when a caller has already resolved one — takes precedence over
+     *        $request so voters can express true object-level (IDOR) rules instead of only request-shaped
+     *        ones. No current caller resolves one yet (`SecurityMiddleware` runs pre-dispatch, before route
+     *        parameters are hydrated into entities); accepting it here is the contract callers can adopt as
+     *        that resolution lands, without another signature change.
      * @throws SecurityException If access is denied or configuration is invalid.
      */
-    public function analyze(string $controller, string $method, ?ServerRequestInterface $request = null): void
-    {
+    public function analyze(
+        string $controller,
+        string $method,
+        ?ServerRequestInterface $request = null,
+        mixed $resolvedSubject = null,
+    ): void {
         $span = $this->tracer->startSpan('waffle.security.authorize', SpanKind::Internal);
         $span->setAttribute('code.namespace', $controller);
         $span->setAttribute('code.function', $method);
 
         try {
-            $this->authorize($controller, $method, $request);
+            $this->authorize($controller, $method, $request, $resolvedSubject);
         } catch (SecurityException $denied) {
             $span->recordException($denied);
             $span->setStatus(SpanStatus::Error);
@@ -147,8 +158,12 @@ final readonly class SecureContainer implements ContainerInterface
      *
      * @throws SecurityException If access is denied or the target is unreachable.
      */
-    private function authorize(string $controller, string $method, ?ServerRequestInterface $request): void
-    {
+    private function authorize(
+        string $controller,
+        string $method,
+        ?ServerRequestInterface $request,
+        mixed $resolvedSubject,
+    ): void {
         try {
             $classReflection = new ReflectionClass($controller);
             $methodReflection = $classReflection->getMethod($method);
@@ -163,10 +178,10 @@ final readonly class SecureContainer implements ContainerInterface
         $voters = $this->discoverRules($classReflection, $methodReflection);
 
         // 2. Fail-closed: no voters means missing policy. Only `#[PublicAccess]`
-        //    on the target method or its declaring class opts the action out of
-        //    the access check. A method-level voter is enough to satisfy the
-        //    requirement even if the class as a whole is unmarked.
-        if ($voters === [] && !$this->isPublicAccess($classReflection, $methodReflection)) {
+        //    on the target method itself opts the action out of the access check
+        //    (SEC-05: method-only — a class-level opt-out would silently expose
+        //    any future unvoted method added to that controller).
+        if ($voters === [] && !$this->isPublicAccess($methodReflection)) {
             throw new SecurityException(
                 message: sprintf(
                     'Security Policy Violation: %s::%s declares no #[Voter] and is not marked #[PublicAccess]. '
@@ -178,11 +193,13 @@ final readonly class SecureContainer implements ContainerInterface
             );
         }
 
-        // 3. Decision Phase: every voter must pass (Consensus pattern). The
-        //    request is threaded through as the decision subject so voters can
-        //    express ownership / IDOR rules against the route and identity.
+        // 3. Decision Phase: every voter must pass (Consensus pattern). A
+        //    resolved domain entity takes precedence over the bare request as
+        //    the decision subject, so voters can express true object-level
+        //    (IDOR) rules once a caller supplies one (SEC-05).
+        $subject = $resolvedSubject ?? $request;
         foreach ($voters as $voterAttribute) {
-            $this->vote(voterName: $voterAttribute->name, subject: $request);
+            $this->vote(voterName: $voterAttribute->name, subject: $subject);
         }
     }
 
@@ -203,14 +220,12 @@ final readonly class SecureContainer implements ContainerInterface
 
     /**
      * True when the action is explicitly marked publicly accessible by a
-     * `#[PublicAccess]` attribute on either the method or its declaring class.
+     * `#[PublicAccess]` attribute on the method itself (SEC-05: method-only —
+     * see {@see PublicAccess} for why class-level placement was removed).
      */
-    private function isPublicAccess(ReflectionClass $class, ReflectionMethod $method): bool
+    private function isPublicAccess(ReflectionMethod $method): bool
     {
-        if ($method->getAttributes(PublicAccess::class) !== []) {
-            return true;
-        }
-        return $class->getAttributes(PublicAccess::class) !== [];
+        return $method->getAttributes(PublicAccess::class) !== [];
     }
 
     /**

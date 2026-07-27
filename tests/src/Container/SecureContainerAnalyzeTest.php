@@ -17,8 +17,8 @@ use WaffleTests\Commons\Security\Helper\Controller\AllowingController;
 use WaffleTests\Commons\Security\Helper\Controller\DenyingController;
 use WaffleTests\Commons\Security\Helper\Controller\MisconfiguredVoterController;
 use WaffleTests\Commons\Security\Helper\Controller\MissingVoterClassController;
-use WaffleTests\Commons\Security\Helper\Controller\PublicAccessClassController;
 use WaffleTests\Commons\Security\Helper\Controller\PublicAccessMethodController;
+use WaffleTests\Commons\Security\Helper\Controller\StrayClassLevelPublicAccessController;
 use WaffleTests\Commons\Security\Helper\Controller\UnvotedController;
 
 #[CoversClass(SecureContainer::class)]
@@ -44,12 +44,16 @@ final class SecureContainerAnalyzeTest extends TestCase
         $this->makeContainer()->analyze(UnvotedController::class, 'action');
     }
 
-    public function testAnalyzeWithClassLevelPublicAccessPermitsAction(): void
+    public function testAnalyzeIgnoresStrayClassLevelPublicAccessAndFailsClosed(): void
     {
-        // A class-level `#[PublicAccess]` opts every action out of fail-closed.
-        $this->makeContainer()->analyze(PublicAccessClassController::class, 'action');
+        // SEC-05: PublicAccess is method-only now. A stray class-level attribute
+        // (the pre-fix convention, which used to exempt every unvoted method —
+        // including ones added later) must no longer grant access.
+        $this->expectException(SecurityException::class);
+        $this->expectExceptionCode(403);
+        $this->expectExceptionMessage('not marked #[PublicAccess]');
 
-        $this->expectNotToPerformAssertions();
+        $this->makeContainer()->analyze(StrayClassLevelPublicAccessController::class, 'action');
     }
 
     public function testAnalyzeWithMethodLevelPublicAccessPermitsAction(): void
