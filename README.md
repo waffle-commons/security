@@ -183,6 +183,15 @@ Contract-first, component-agnostic by construction: components compose through `
 docker exec -w /waffle-commons/security waffle-dev composer tests
 ```
 
+## 📚 Documentation
+
+Central framework docs live in the [waffle-commons/documentation](https://github.com/waffle-commons/documentation) repository:
+
+- Reference: [security](https://github.com/waffle-commons/documentation/blob/main/reference/security.md)
+- Explanation: [Fail-closed ABAC](https://github.com/waffle-commons/documentation/blob/main/explanation/security-fail-closed-abac.md)
+- Explanation: [CSRF double-submit](https://github.com/waffle-commons/documentation/blob/main/explanation/security-csrf-double-submit.md)
+- Explanation: [Two-layer authorization](https://github.com/waffle-commons/documentation/blob/main/explanation/security-two-layer-authorization.md)
+
 ## 📄 License
 
 MIT — see [LICENSE.md](./LICENSE.md).
