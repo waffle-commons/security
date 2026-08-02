@@ -16,6 +16,13 @@ use Waffle\Commons\Security\Exception\SecurityException;
 
 class SecurityMiddleware implements MiddlewareInterface
 {
+    /**
+     * @param SecureContainer $secureContainer Runs the #[Voter] consensus for the dispatched action.
+     *        SEC-05: subject resolution (hydrating the entity an `{id}` route parameter identifies)
+     *        lives INSIDE the SecureContainer — ctor-injected there, resolved lazily and only for
+     *        voted actions — so this middleware stays a thin trigger + denial-audit layer.
+     * @param LoggerInterface|null $logger SECURITY-channel logger for denial audit trails.
+     */
     public function __construct(
         private(set) readonly SecureContainer $secureContainer,
         private(set) ?LoggerInterface $logger = null,
@@ -38,6 +45,17 @@ class SecurityMiddleware implements MiddlewareInterface
         if (is_array($controller) && $method === null) {
             $method = $controller[1] ?? null;
             $controller = $controller[0] ?? null;
+
+            // Write the normalised target back so every downstream consumer —
+            // subject resolvers reading the request inside the SecureContainer,
+            // later middlewares, the dispatcher — sees one canonical string
+            // shape even when the router provided the array form.
+            if (is_string($controller) && is_string($method)) {
+                $request = $request->withAttribute(Constant::ATTR_CLASSNAME, $controller)->withAttribute(
+                    Constant::ATTR_METHOD,
+                    $method,
+                );
+            }
         }
 
         if (!is_string($controller) || !is_string($method)) {
@@ -48,8 +66,11 @@ class SecurityMiddleware implements MiddlewareInterface
 
         // 3. Security Analysis (ABAC)
         try {
-            // The SecureContainer reads #[Voter] attributes on the class and method
-            // and runs each voter with the authenticated context + the request.
+            // The SecureContainer reads #[Voter] attributes on the class and
+            // method and runs each voter with the authenticated context. SEC-05:
+            // it also owns subject resolution — lazy, voter-gated, fail-closed —
+            // so a resolver failure surfaces here as a SecurityException and is
+            // logged below exactly like any voter denial.
             $this->secureContainer->analyze($controller, $method, $request);
         } catch (SecurityException $e) {
             // 4. Defense: Trace the denied access attempt

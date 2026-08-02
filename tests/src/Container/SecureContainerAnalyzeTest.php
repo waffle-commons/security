@@ -18,7 +18,6 @@ use WaffleTests\Commons\Security\Helper\Controller\DenyingController;
 use WaffleTests\Commons\Security\Helper\Controller\MisconfiguredVoterController;
 use WaffleTests\Commons\Security\Helper\Controller\MissingVoterClassController;
 use WaffleTests\Commons\Security\Helper\Controller\PublicAccessMethodController;
-use WaffleTests\Commons\Security\Helper\Controller\StrayClassLevelPublicAccessController;
 use WaffleTests\Commons\Security\Helper\Controller\UnvotedController;
 
 #[CoversClass(SecureContainer::class)]
@@ -44,17 +43,11 @@ final class SecureContainerAnalyzeTest extends TestCase
         $this->makeContainer()->analyze(UnvotedController::class, 'action');
     }
 
-    public function testAnalyzeIgnoresStrayClassLevelPublicAccessAndFailsClosed(): void
-    {
-        // SEC-05: PublicAccess is method-only now. A stray class-level attribute
-        // (the pre-fix convention, which used to exempt every unvoted method —
-        // including ones added later) must no longer grant access.
-        $this->expectException(SecurityException::class);
-        $this->expectExceptionCode(403);
-        $this->expectExceptionMessage('not marked #[PublicAccess]');
-
-        $this->makeContainer()->analyze(StrayClassLevelPublicAccessController::class, 'action');
-    }
+    // SEC-05 note: the former stray-class-level `#[PublicAccess]` regression
+    // fixture is gone — with `Attribute::TARGET_METHOD` in fresh contracts,
+    // Mago rejects the placement statically (invalid-attribute-target), so the
+    // scenario can no longer exist in a gated codebase. Runtime fail-closed
+    // behaviour for unmarked methods stays covered by the tests above/below.
 
     public function testAnalyzeWithMethodLevelPublicAccessPermitsAction(): void
     {
