@@ -1,6 +1,6 @@
 {
     "name": "waffle-commons/security",
-    "description": "Security component for Waffle framework.",
+    "description": "Hierarchical Attribute-Based Access Control for Waffle Commons: fail-closed by default, object-level voters, a stateless HMAC CSRF subsystem bound to a per-browser session id, and fail-closed CORS.",
     "type": "library",
     "license": "MIT",
     "autoload": {
