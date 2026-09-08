@@ -14,6 +14,7 @@ use Waffle\Commons\Security\Container\SecureContainer;
 use Waffle\Commons\Security\Exception\SecurityException;
 use WaffleTests\Commons\Security\Helper\AutowiringContainer;
 use WaffleTests\Commons\Security\Helper\Controller\OwnedResourceController;
+use WaffleTests\Commons\Security\Helper\Entity\OwnedResource;
 use WaffleTests\Commons\Security\Helper\Identity\FakeIdentity;
 
 /**
@@ -63,5 +64,38 @@ final class SecureContainerIdorTest extends TestCase
         $this->expectExceptionCode(403);
 
         $this->makeContainer('u1')->analyze(OwnedResourceController::class, 'edit', $this->requestOwnedBy('u2'));
+    }
+
+    public function testResolvedSubjectTakesPrecedenceOverRequestForOwnershipDecision(): void
+    {
+        // SEC-05: a caller-resolved domain entity is now what the voter decides
+        // against — true object-level IDOR, not just request-attribute
+        // inspection. The request here is (deliberately) owned by a DIFFERENT
+        // user than the resolved entity, proving the entity wins, not the
+        // request.
+        $this->makeContainer('u1')->analyze(
+            OwnedResourceController::class,
+            'edit',
+            $this->requestOwnedBy('u2'),
+            new OwnedResource(ownerId: 'u1'),
+        );
+
+        $this->expectNotToPerformAssertions();
+    }
+
+    public function testResolvedSubjectOwnershipMismatchIsDenied(): void
+    {
+        // Mirror of the above: the request would have granted access ('u1'
+        // owns it per the request), but the resolved entity says 'u2' owns
+        // it — the resolved entity must win, so access is denied.
+        $this->expectException(SecurityException::class);
+        $this->expectExceptionCode(403);
+
+        $this->makeContainer('u1')->analyze(
+            OwnedResourceController::class,
+            'edit',
+            $this->requestOwnedBy('u1'),
+            new OwnedResource(ownerId: 'u2'),
+        );
     }
 }

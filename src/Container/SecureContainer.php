@@ -18,6 +18,7 @@ use Waffle\Commons\Contracts\Security\Attribute\PublicAccess;
 use Waffle\Commons\Contracts\Security\Attribute\Voter;
 use Waffle\Commons\Contracts\Security\Exception\SecurityExceptionInterface;
 use Waffle\Commons\Contracts\Security\SecurityInterface;
+use Waffle\Commons\Contracts\Security\SubjectResolverInterface;
 use Waffle\Commons\Contracts\Security\VoterInterface;
 use Waffle\Commons\Contracts\Service\ResettableInterface;
 use Waffle\Commons\Contracts\Telemetry\Enum\SpanKind;
@@ -53,6 +54,12 @@ final readonly class SecureContainer implements ContainerInterface
      * @param PsrContainerInterface $inner The raw PSR-11 container implementation.
      * @param SecurityInterface $security The security layer.
      * @param SecurityContextInterface $securityContext Request-scoped authenticated identity, threaded into voters.
+     * @param SubjectResolverInterface|null $subjectResolver SEC-05: optional hook that hydrates the domain
+     *        subject (e.g. the entity an `{id}` route parameter identifies) so voters can express
+     *        object-level (IDOR) rules. Resolution is LAZY and voter-gated: it runs only once the
+     *        dispatched action is known to carry at least one #[Voter] — #[PublicAccess] actions with
+     *        no voters never invoke it (no hydration cost, no false 403 from a failed lookup). A
+     *        resolver throw on a voted route is fail-closed (403). Null keeps request-shaped voting.
      */
     public function __construct(
         private PsrContainerInterface $inner,
@@ -60,6 +67,7 @@ final readonly class SecureContainer implements ContainerInterface
         private SecurityContextInterface $securityContext,
         private array $instances = [],
         private TracerInterface $tracer = new NullTracer(),
+        private ?SubjectResolverInterface $subjectResolver = null,
     ) {}
 
     /**
@@ -117,21 +125,34 @@ final readonly class SecureContainer implements ContainerInterface
      *
      * Fail-closed policy (Beta-1): if neither the controller class nor the
      * target method carries a `#[Voter]`, access is denied with a 403 unless
-     * the target is explicitly marked `#[PublicAccess]`.
+     * the target method is explicitly marked `#[PublicAccess]`.
      *
      * @param string $controller The FQCN of the controller.
      * @param string $method The method name to audit.
-     * @param ServerRequestInterface|null $request Current request, threaded to voters as the decision subject.
+     * @param ServerRequestInterface|null $request Current request, threaded to voters as the decision subject
+     *        whenever no richer $resolvedSubject is supplied.
+     * @param mixed $resolvedSubject SEC-05: the real domain entity/model under decision (e.g. the `Order`
+     *        a route's `{id}` identifies), when a caller has already resolved one — takes precedence over
+     *        both the ctor-injected {@see SubjectResolverInterface} and $request, so voters can express
+     *        true object-level (IDOR) rules instead of only request-shaped ones. When no explicit subject
+     *        is supplied, the ctor-injected resolver (if any) is consulted LAZILY, only after voter
+     *        discovery finds at least one #[Voter] — public, unvoted actions never trigger resolution.
+     *        A resolver failure on a voted route is fail-closed: it becomes a 403 SecurityException
+     *        (previous chained) that flows through the middleware's standard denial-logging path.
      * @throws SecurityException If access is denied or configuration is invalid.
      */
-    public function analyze(string $controller, string $method, ?ServerRequestInterface $request = null): void
-    {
+    public function analyze(
+        string $controller,
+        string $method,
+        ?ServerRequestInterface $request = null,
+        mixed $resolvedSubject = null,
+    ): void {
         $span = $this->tracer->startSpan('waffle.security.authorize', SpanKind::Internal);
         $span->setAttribute('code.namespace', $controller);
         $span->setAttribute('code.function', $method);
 
         try {
-            $this->authorize($controller, $method, $request);
+            $this->authorize($controller, $method, $request, $resolvedSubject);
         } catch (SecurityException $denied) {
             $span->recordException($denied);
             $span->setStatus(SpanStatus::Error);
@@ -147,8 +168,12 @@ final readonly class SecureContainer implements ContainerInterface
      *
      * @throws SecurityException If access is denied or the target is unreachable.
      */
-    private function authorize(string $controller, string $method, ?ServerRequestInterface $request): void
-    {
+    private function authorize(
+        string $controller,
+        string $method,
+        ?ServerRequestInterface $request,
+        mixed $resolvedSubject,
+    ): void {
         try {
             $classReflection = new ReflectionClass($controller);
             $methodReflection = $classReflection->getMethod($method);
@@ -163,26 +188,72 @@ final readonly class SecureContainer implements ContainerInterface
         $voters = $this->discoverRules($classReflection, $methodReflection);
 
         // 2. Fail-closed: no voters means missing policy. Only `#[PublicAccess]`
-        //    on the target method or its declaring class opts the action out of
-        //    the access check. A method-level voter is enough to satisfy the
-        //    requirement even if the class as a whole is unmarked.
-        if ($voters === [] && !$this->isPublicAccess($classReflection, $methodReflection)) {
-            throw new SecurityException(
-                message: sprintf(
-                    'Security Policy Violation: %s::%s declares no #[Voter] and is not marked #[PublicAccess]. '
-                    . 'Add a Voter or explicitly opt out with #[PublicAccess].',
-                    $controller,
-                    $method,
-                ),
-                code: 403,
-            );
+        //    on the target method itself opts the action out of the access check
+        //    (SEC-05: method-only — a class-level opt-out would silently expose
+        //    any future unvoted method added to that controller).
+        if ($voters === []) {
+            if (!$this->isPublicAccess($methodReflection)) {
+                throw new SecurityException(
+                    message: sprintf(
+                        'Security Policy Violation: %s::%s declares no #[Voter] and is not marked #[PublicAccess]. '
+                        . 'Add a Voter or explicitly opt out with #[PublicAccess].',
+                        $controller,
+                        $method,
+                    ),
+                    code: 403,
+                );
+            }
+
+            // #[PublicAccess] with zero voters: no decision will consume a
+            // subject, so the subject resolver is deliberately NEVER consulted
+            // — a failed lookup (stale link, unknown id) must not turn a
+            // public action into a 403, and public routes must not pay the
+            // hydration cost of a discarded subject (SEC-05).
+            return;
         }
 
         // 3. Decision Phase: every voter must pass (Consensus pattern). The
-        //    request is threaded through as the decision subject so voters can
-        //    express ownership / IDOR rules against the route and identity.
+        //    decision subject, in precedence order: the caller-supplied
+        //    $resolvedSubject, then the ctor-injected resolver's result
+        //    (computed lazily, only now that voters exist to consume it),
+        //    then the bare request — so voters can express true object-level
+        //    (IDOR) rules whenever a richer subject is available (SEC-05).
+        $subject = $resolvedSubject ?? $this->resolveSubject($request) ?? $request;
         foreach ($voters as $voterAttribute) {
-            $this->vote(voterName: $voterAttribute->name, subject: $request);
+            $this->vote(voterName: $voterAttribute->name, subject: $subject);
+        }
+    }
+
+    /**
+     * Lazily resolves the domain subject via the ctor-injected resolver (SEC-05).
+     *
+     * Called only when the dispatched action carries at least one #[Voter] —
+     * public, unvoted actions never trigger resolution. Fail-closed: any
+     * resolver throw becomes a 403 SecurityException (previous chained), which
+     * bubbles out of analyze() and through the middleware's standard
+     * denial-logging path, exactly like a voter denial.
+     *
+     * @return mixed The resolved domain subject, or null when no resolver is
+     *         wired, no request is available, or the route carries no resource.
+     * @throws SecurityException When the resolver fails (fail-closed).
+     */
+    private function resolveSubject(?ServerRequestInterface $request): mixed
+    {
+        if ($this->subjectResolver === null || $request === null) {
+            return null;
+        }
+
+        try {
+            return $this->subjectResolver->resolve($request);
+        } catch (Throwable $failure) {
+            throw new SecurityException(
+                message: sprintf(
+                    'Security subject resolution failed — denying access (fail-closed): %s',
+                    $failure->getMessage(),
+                ),
+                code: 403,
+                previous: $failure,
+            );
         }
     }
 
@@ -203,14 +274,12 @@ final readonly class SecureContainer implements ContainerInterface
 
     /**
      * True when the action is explicitly marked publicly accessible by a
-     * `#[PublicAccess]` attribute on either the method or its declaring class.
+     * `#[PublicAccess]` attribute on the method itself (SEC-05: method-only —
+     * see {@see PublicAccess} for why class-level placement was removed).
      */
-    private function isPublicAccess(ReflectionClass $class, ReflectionMethod $method): bool
+    private function isPublicAccess(ReflectionMethod $method): bool
     {
-        if ($method->getAttributes(PublicAccess::class) !== []) {
-            return true;
-        }
-        return $class->getAttributes(PublicAccess::class) !== [];
+        return $method->getAttributes(PublicAccess::class) !== [];
     }
 
     /**
@@ -219,8 +288,9 @@ final readonly class SecureContainer implements ContainerInterface
      * AUTHZ-01: the voter is resolved THROUGH the inner PSR-11 container so it is
      * autowired with its declared collaborators, instead of a context-free
      * `new $voterName()`. The authenticated identity reaches the voter via
-     * $this->securityContext; $subject carries the decision target (the current
-     * request, until a richer resource resolver lands).
+     * $this->securityContext; $subject carries the decision target (a resolved
+     * domain entity when one is available — explicit or via the ctor-injected
+     * subject resolver — otherwise the current request).
      *
      * @param mixed $subject The resource under decision (or the PSR-7 request).
      */

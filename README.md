@@ -10,7 +10,7 @@
 Waffle Security Component
 =========================
 
-> **Release:** `0.1.0-beta5` &nbsp;|&nbsp; [`CHANGELOG.md`](./CHANGELOG.md)
+> **Release:** `0.1.0-beta6` &nbsp;|&nbsp; [`CHANGELOG.md`](./CHANGELOG.md)
 
 Hierarchical Attribute-Based Access Control (ABAC) for the Waffle Framework with a **fail-closed default** (SEC-02), a fully **stateless HMAC CSRF subsystem** bound to a per-browser anonymous SID (SEC-01 option C), and a container decorator (`SecureContainer`) that hardens service retrieval. Security is enforced by PSR-15 middleware sitting between routing and dispatch.
 
@@ -182,6 +182,15 @@ Contract-first, component-agnostic by construction: components compose through `
 ```bash
 docker exec -w /waffle-commons/security waffle-dev composer tests
 ```
+
+## 📚 Documentation
+
+Central framework docs live in the [waffle-commons/documentation](https://github.com/waffle-commons/documentation) repository:
+
+- Reference: [security](https://github.com/waffle-commons/documentation/blob/main/reference/security.md)
+- Explanation: [Fail-closed ABAC](https://github.com/waffle-commons/documentation/blob/main/explanation/security-fail-closed-abac.md)
+- Explanation: [CSRF double-submit](https://github.com/waffle-commons/documentation/blob/main/explanation/security-csrf-double-submit.md)
+- Explanation: [Two-layer authorization](https://github.com/waffle-commons/documentation/blob/main/explanation/security-two-layer-authorization.md)
 
 ## 📄 License
 

@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionException;
 use Waffle\Commons\Contracts\Constant\Constant;
@@ -15,6 +16,7 @@ use Waffle\Commons\Contracts\Security\Csrf\Attribute\RequiresCsrfToken;
 use Waffle\Commons\Contracts\Security\Csrf\Constant as CsrfConstant;
 use Waffle\Commons\Contracts\Security\Csrf\CsrfTokenManagerInterface;
 use Waffle\Commons\Security\Csrf\CsrfBindingResolver;
+use Waffle\Commons\Security\Csrf\Exception\CsrfException;
 use Waffle\Commons\Security\Csrf\Exception\InvalidCsrfTokenException;
 use Waffle\Commons\Security\Csrf\Exception\MissingCsrfTokenException;
 
@@ -46,6 +48,7 @@ final class CsrfMiddleware implements MiddlewareInterface
 
     public function __construct(
         private readonly CsrfTokenManagerInterface $tokenManager,
+        private readonly ?LoggerInterface $logger = null,
     ) {}
 
     #[\Override]
@@ -64,7 +67,9 @@ final class CsrfMiddleware implements MiddlewareInterface
         $candidate = $this->extractTokenValue($request);
 
         if ($candidate === null || $candidate === '') {
-            throw new MissingCsrfTokenException(tokenId: $tokenId);
+            $exception = new MissingCsrfTokenException(tokenId: $tokenId);
+            $this->logDenial($request, $exception, 'missing');
+            throw $exception;
         }
 
         // SEC-01: bind validation to the authenticated subject when present,
@@ -74,11 +79,15 @@ final class CsrfMiddleware implements MiddlewareInterface
         // misconfigured (no SID published) — treat as invalid to fail-closed.
         $binding = CsrfBindingResolver::resolve($request);
         if ($binding === null) {
-            throw new InvalidCsrfTokenException(tokenId: $tokenId);
+            $exception = new InvalidCsrfTokenException(tokenId: $tokenId);
+            $this->logDenial($request, $exception, 'invalid (no binding published)');
+            throw $exception;
         }
 
         if (!$this->tokenManager->validate($tokenId, $binding, $candidate)) {
-            throw new InvalidCsrfTokenException(tokenId: $tokenId);
+            $exception = new InvalidCsrfTokenException(tokenId: $tokenId);
+            $this->logDenial($request, $exception, 'invalid (attempted forgery or stale token)');
+            throw $exception;
         }
 
         // Publish the validated id for downstream consumers (e.g. audit, controllers
@@ -86,6 +95,23 @@ final class CsrfMiddleware implements MiddlewareInterface
         // intentionally NOT published — it MUST come from the manager only.
         $forwarded = $request->withAttribute(CsrfConstant::REQUEST_ATTRIBUTE, $tokenId);
         return $handler->handle($forwarded);
+    }
+
+    /**
+     * Logs a CSRF denial on the SECURITY channel — mirrors SecurityMiddleware's
+     * own audit path, which this middleware otherwise bypasses entirely (its
+     * exception type deliberately doesn't extend SecurityException). $reason
+     * differentiates "dropped the token" from "attempted to forge one" per
+     * {@see \Waffle\Commons\Contracts\Security\Csrf\Exception\MissingCsrfTokenExceptionInterface}'s
+     * own documented intent.
+     */
+    private function logDenial(ServerRequestInterface $request, CsrfException $e, string $reason): void
+    {
+        $this->logger?->warning('[csrf] Token rejected: ' . $e->getMessage(), [
+            'ip' => $request->getServerParams()['REMOTE_ADDR'] ?? 'unknown',
+            'uri' => (string) $request->getUri(),
+            'reason' => $reason,
+        ]);
     }
 
     /**
