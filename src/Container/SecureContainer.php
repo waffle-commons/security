@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Waffle\Commons\Security\Container;
 
+use IgorPhp\IgorBundle\Attribute\WorkerSafe;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -109,6 +110,9 @@ final readonly class SecureContainer implements ContainerInterface
      * {@inheritdoc}
      */
     #[\Override]
+    #[WorkerSafe(
+        reason: 'container registration API: boot-time wiring plus the idempotent lazy controller registration of ControllerDispatcher (class name to itself, bounded by the controller count, no request data)',
+    )]
     public function set(string $id, object|callable|string $concrete): void
     {
         // We attempt to call set() on the inner container if it supports it.
@@ -141,6 +145,9 @@ final readonly class SecureContainer implements ContainerInterface
      *        (previous chained) that flows through the middleware's standard denial-logging path.
      * @throws SecurityException If access is denied or configuration is invalid.
      */
+    #[WorkerSafe(
+        reason: 'per-call span from the injected tracer, ended in finally; attributes and status go to that span only, nothing survives the call',
+    )]
     public function analyze(
         string $controller,
         string $method,
