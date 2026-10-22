@@ -12,6 +12,7 @@ use Waffle\Commons\Contracts\RateLimit\Exception\StateStorageExceptionInterface;
 use Waffle\Commons\Contracts\RateLimit\LimiterStateStorageInterface;
 use Waffle\Commons\Contracts\RateLimit\RateLimitDecision;
 use Waffle\Commons\Contracts\RateLimit\TokenBucket;
+use Waffle\Commons\Contracts\Telemetry\Metrics\MetricsRegistryInterface;
 use Waffle\Commons\Security\RateLimit\RateLimiter;
 use Waffle\Commons\Security\RateLimit\StorageFailureMode;
 
@@ -47,6 +48,21 @@ final class RateLimiterTest extends TestCase
         static::assertFalse($decision->allowed);
         static::assertFalse($decision->enforced);
         static::assertSame(1, $decision->retryAfterSeconds);
+    }
+
+    public function testAnOutageIsCountedByFailureModeOnly(): void
+    {
+        $metrics = $this->createMock(MetricsRegistryInterface::class);
+        $metrics->expects($this->once())->method('increment')->with(RateLimiter::STORAGE_ERRORS_METRIC, 1.0, [
+            'mode' => 'closed',
+        ]);
+
+        new RateLimiter(
+            $this->brokenStorage(),
+            new TokenBucket(10, 60),
+            StorageFailureMode::Closed,
+            metrics: $metrics,
+        )->consume('ip:203.0.113.7');
     }
 
     public function testRefusesAnEmptyKey(): void

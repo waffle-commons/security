@@ -9,6 +9,9 @@ Released in lockstep with the Waffle Commons umbrella tag.
 
 ### Added
 - **Rate limiting (NET-01, RFC-017 §3.1).** `RateLimit\RateLimiter` implements `RateLimiterInterface` over the shared `LimiterStateStorageInterface` (token bucket) with a `StorageFailureMode` (`on_storage_failure`: `open` by default, logged and unenforced; `closed` answers 503). `Middleware\RateLimitMiddleware` keys calls by authenticated subject, else by the client IP resolved behind trusted proxies, answers `429` with `Retry-After` on an empty bucket and sets `RateLimit-Limit` / `-Remaining` / `-Reset` on enforced responses.
+- A storage outage is counted, as NET-01 specifies: `RateLimiter` takes an optional `MetricsRegistryInterface` and
+  increments `waffle_ratelimit_storage_errors_total{mode}` (`RateLimiter::STORAGE_ERRORS_METRIC`, labelled by
+  failure mode only) next to its warning, whose message now names the mode.
 
 ### Dependencies
 - `nyholm/psr7` is a development dependency for the component's own tests.
