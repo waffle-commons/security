@@ -7,6 +7,7 @@ namespace WaffleTests\Commons\Security\RateLimit;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Waffle\Commons\Contracts\RateLimit\Exception\StateStorageExceptionInterface;
 use Waffle\Commons\Contracts\RateLimit\LimiterStateStorageInterface;
@@ -48,6 +49,31 @@ final class RateLimiterTest extends TestCase
         static::assertFalse($decision->allowed);
         static::assertFalse($decision->enforced);
         static::assertSame(1, $decision->retryAfterSeconds);
+    }
+
+    /**
+     * NET-01: an outage is never silent. One warning names the failure mode and carries the storage's
+     * exception, whichever way the limiter then decides.
+     */
+    public function testAnOutageIsLoggedAsAWarningWithItsModeAndCause(): void
+    {
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger
+            ->expects(static::once())
+            ->method('warning')
+            ->with(
+                'Rate-limit storage unavailable; on_storage_failure is {mode}.',
+                static::callback(
+                    static fn(array $context): bool => (
+                        ($context['mode'] ?? null) === 'closed'
+                        && ($context['exception'] ?? null) instanceof StateStorageExceptionInterface
+                    ),
+                ),
+            );
+
+        new RateLimiter($this->brokenStorage(), new TokenBucket(10, 60), StorageFailureMode::Closed, $logger)->consume(
+            'k',
+        );
     }
 
     public function testAnOutageIsCountedByFailureModeOnly(): void
