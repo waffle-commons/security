@@ -10,13 +10,17 @@
 Waffle Security Component
 =========================
 
-> **Release:** `0.1.0-beta6` &nbsp;|&nbsp; [`CHANGELOG.md`](./CHANGELOG.md)
+> **Release:** `0.1.0-beta7` &nbsp;|&nbsp; [`CHANGELOG.md`](./CHANGELOG.md)
 
 Hierarchical Attribute-Based Access Control (ABAC) for the Waffle Framework with a **fail-closed default** (SEC-02), a fully **stateless HMAC CSRF subsystem** bound to a per-browser anonymous SID (SEC-01 option C), and a container decorator (`SecureContainer`) that hardens service retrieval. Security is enforced by PSR-15 middleware sitting between routing and dispatch.
 
-## Beta-2 status
+## 🆕 Beta-7 — rate limiting (NET-01)
 
-No behavioural changes since Beta-1 — lockstep version bump only. The security architecture remains as described below.
+- **`Middleware\RateLimitMiddleware`** keys each call by the authenticated subject, else by the client IP resolved behind trusted proxies, and answers `429` with `Retry-After` when the bucket is empty. Enforced responses carry `RateLimit-Limit`, `RateLimit-Remaining` and `RateLimit-Reset`.
+- **`RateLimit\RateLimiter`** implements `RateLimiterInterface` (a token bucket) over the shared `LimiterStateStorageInterface`; `waffle-commons/data`'s `RedisLimiterStateStorage` keeps the buckets in Redis, so every worker and every instance shares them.
+- **A storage outage follows `on_storage_failure`** (`RateLimit\StorageFailureMode`): `open` by default, which lets the call through unenforced with a warning, or `closed`, which answers `503`. Given a `MetricsRegistryInterface`, `RateLimiter` counts each outage in `waffle_ratelimit_storage_errors_total{mode}` (`RateLimiter::STORAGE_ERRORS_METRIC`).
+
+How-to: [Rate-limit requests](https://github.com/waffle-commons/documentation/blob/main/how-to/rate-limit-requests.md).
 
 ## 🆕 Beta-1 foundations (still current)
 
@@ -42,6 +46,8 @@ composer require waffle-commons/security
 | `Waffle\Commons\Security\Csrf\CsrfTokenManager` | `final readonly` stateless HMAC-SHA256 token manager. Constructor takes a 32+ byte secret. |
 | `Waffle\Commons\Security\Container\SecureContainer` | Decorator over `Waffle\Commons\Contracts\Container\ContainerInterface`. **Beta-1:** `analyze()` is now fail-closed — empty voter list ⇒ `SecurityException(403)` unless `#[PublicAccess]` is present. |
 | `Waffle\Commons\Security\Rule\Level1Rule` … `Level10Rule` | The ten built-in security levels (1 = public … 10 = god-mode). |
+| `Waffle\Commons\Security\Middleware\RateLimitMiddleware` | PSR-15 rate limiting (*Beta-7*, NET-01): `429` + `Retry-After` on an empty bucket, `RateLimit-*` headers on enforced responses. |
+| `Waffle\Commons\Security\RateLimit\RateLimiter` | `RateLimiterInterface` token bucket over the shared `LimiterStateStorageInterface`, with a `StorageFailureMode` (`open` / `closed`). |
 
 ## 🚦 The security ladder
 
@@ -74,22 +80,9 @@ final class Security extends AbstractSecurity
 }
 ```
 
-## 🏷️ `#[Rule]` — declaring required levels
+## 🏷️ Levels are application-wide
 
-The attribute lives in the contracts package (`Waffle\Commons\Contracts\Security\Attribute\Rule`). Apply it to controller methods or classes:
-
-```php
-use Waffle\Commons\Contracts\Security\Attribute\Rule;
-use Waffle\Commons\Contracts\Constant\Constant;
-
-final class AdminController
-{
-    #[Rule(level: Constant::SECURITY_LEVEL10)]
-    public function dangerous(): Response { /* … */ }
-}
-```
-
-If `Security::analyze()` is invoked against a controller method that requires a level higher than the kernel's configured level, a `SecurityExceptionInterface` is thrown and the `ErrorHandlerMiddleware` renders it as RFC 7807 `403`.
+The level is one setting for the whole application, `waffle.security.level`: there is no attribute that declares a level on a controller (there is no `#[Rule]` attribute). `Security::analyze()` walks the rule ladder up to the configured level and throws a `SecurityExceptionInterface`, which the `ErrorHandlerMiddleware` renders as an RFC 7807 `403`. Per-action authorization is the job of `#[Voter]`, below.
 
 ## 🚪 Fail-closed ABAC + `#[PublicAccess]` (Beta-1 / SEC-02)
 
@@ -157,7 +150,7 @@ $stack
 
 - Typed constructors throughout (`Security` takes `ConfigInterface`, level resolution is `?int ?? 1`).
 - Typed integer security levels declared as typed constants in `Constant::SECURITY_LEVEL*`.
-- `#[Rule]` / `#[Voter]` / `#[RequiresCsrfToken]` / `#[PublicAccess]` attributes from the contracts package.
+- `#[Voter]` / `#[RequiresCsrfToken]` / `#[PublicAccess]` attributes from the contracts package.
 - `final readonly class CsrfToken` value object; `final readonly class CsrfTokenManager` (no instance state across requests).
 - `#[\SensitiveParameter]` on the CSRF signing secret to suppress its value from stack traces and error reports.
 
@@ -188,6 +181,7 @@ docker exec -w /waffle-commons/security waffle-dev composer tests
 Central framework docs live in the [waffle-commons/documentation](https://github.com/waffle-commons/documentation) repository:
 
 - Reference: [security](https://github.com/waffle-commons/documentation/blob/main/reference/security.md)
+- How-to: [Rate-limit requests](https://github.com/waffle-commons/documentation/blob/main/how-to/rate-limit-requests.md)
 - Explanation: [Fail-closed ABAC](https://github.com/waffle-commons/documentation/blob/main/explanation/security-fail-closed-abac.md)
 - Explanation: [CSRF double-submit](https://github.com/waffle-commons/documentation/blob/main/explanation/security-csrf-double-submit.md)
 - Explanation: [Two-layer authorization](https://github.com/waffle-commons/documentation/blob/main/explanation/security-two-layer-authorization.md)
